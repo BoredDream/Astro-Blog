@@ -1,0 +1,42 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PCApp from '../../../components/pc/PCApp.jsx';
+import MobileApp from '../../../components/mobile/MobileApp.jsx';
+import { getBlogEntries, getPosts } from '../../../lib/posts.js';
+import { postParams } from '../../../lib/urls.js';
+
+export async function getStaticPaths() {
+  const entries = await getBlogEntries();
+  return entries.map((entry) => {
+    const { year, month, slug } = postParams({ date: entry.data.date, id: entry.slug });
+    return { params: { year, month, slug }, props: { entry } };
+  });
+}
+
+const { entry } = Astro.props;
+const posts = await getPosts();
+const post = posts.find((p) => p.id === entry.slug);
+const { Content, headings } = await entry.render();
+const readMin = Math.max(1, Math.ceil(entry.body.replace(/\s+/g, '').length / 300));
+---
+<Layout title={`${post.title} · 字间·书吟`} description={post.excerpt || post.title}>
+  <PCApp
+    page="article"
+    posts={posts}
+    post={post}
+    headings={headings}
+    readMin={readMin}
+    client:media="(min-width: 769px)"
+  >
+    <Content />
+  </PCApp>
+  <MobileApp
+    page="article"
+    posts={posts}
+    post={post}
+    readMin={readMin}
+    client:media="(max-width: 768px)"
+  >
+    <Content />
+  </MobileApp>
+</Layout>

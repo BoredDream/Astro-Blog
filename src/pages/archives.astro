@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PCApp from '../components/pc/PCApp.jsx';
+import MobileApp from '../components/mobile/MobileApp.jsx';
+import { getPosts } from '../lib/posts.js';
+
+const posts = await getPosts();
+---
+<Layout title="归档 · 字间·书吟" description="字间·书吟的文章按时间归档。">
+  <PCApp page="archive" posts={posts} client:media="(min-width: 769px)" />
+  <MobileApp page="archive" posts={posts} client:media="(max-width: 768px)" />
+</Layout>

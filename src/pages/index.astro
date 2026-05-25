@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PCApp from '../components/pc/PCApp.jsx';
+import MobileApp from '../components/mobile/MobileApp.jsx';
+import { getPosts } from '../lib/posts.js';
+
+const posts = await getPosts();
+---
+<Layout>
+  <PCApp page="home" posts={posts} pageNum={1} client:media="(min-width: 769px)" />
+  <MobileApp page="home" posts={posts} pageNum={1} client:media="(max-width: 768px)" />
+</Layout>

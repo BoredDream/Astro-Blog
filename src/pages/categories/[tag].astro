@@ -1,0 +1,19 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PCApp from '../../components/pc/PCApp.jsx';
+import MobileApp from '../../components/mobile/MobileApp.jsx';
+import { getBlogEntries, getPosts } from '../../lib/posts.js';
+
+export async function getStaticPaths() {
+  const entries = await getBlogEntries();
+  const tags = [...new Set(entries.flatMap((e) => e.data.tags))];
+  return tags.map((tag) => ({ params: { tag }, props: { tag } }));
+}
+
+const { tag } = Astro.props;
+const posts = await getPosts();
+---
+<Layout title={`#${tag} · 字间·书吟`} description={`标签「${tag}」下的全部文章。`}>
+  <PCApp page="tag" posts={posts} tag={tag} client:media="(min-width: 769px)" />
+  <MobileApp page="tag" posts={posts} tag={tag} client:media="(max-width: 768px)" />
+</Layout>

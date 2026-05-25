@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PCApp from '../components/pc/PCApp.jsx';
+import MobileApp from '../components/mobile/MobileApp.jsx';
+import { getPosts } from '../lib/posts.js';
+
+const posts = await getPosts();
+---
+<Layout title="页面不见了 · 字间·书吟">
+  <PCApp page="404" posts={posts} client:media="(min-width: 769px)" />
+  <MobileApp page="404" posts={posts} client:media="(max-width: 768px)" />
+</Layout>

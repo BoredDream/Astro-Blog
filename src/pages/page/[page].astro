@@ -1,0 +1,25 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PCApp from '../../components/pc/PCApp.jsx';
+import MobileApp from '../../components/mobile/MobileApp.jsx';
+import { getPosts } from '../../lib/posts.js';
+import { config } from '../../config.js';
+
+// 生成第 2 页起的分页路由；第 1 页由 index.astro 负责。
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const totalPages = Math.ceil(posts.length / config.pagination.pageSize);
+  const paths = [];
+  for (let n = 2; n <= totalPages; n++) {
+    paths.push({ params: { page: String(n) }, props: { pageNum: n } });
+  }
+  return paths;
+}
+
+const { pageNum } = Astro.props;
+const posts = await getPosts();
+---
+<Layout title={`第 ${pageNum} 页 · ${config.site.name}`}>
+  <PCApp page="home" posts={posts} pageNum={pageNum} client:media="(min-width: 769px)" />
+  <MobileApp page="home" posts={posts} pageNum={pageNum} client:media="(max-width: 768px)" />
+</Layout>

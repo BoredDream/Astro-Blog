@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PCApp from '../components/pc/PCApp.jsx';
+import MobileApp from '../components/mobile/MobileApp.jsx';
+import { getPosts } from '../lib/posts.js';
+
+const posts = await getPosts();
+---
+<Layout title="友链 · 字间·书吟" description="字间·书吟的友情链接。">
+  <PCApp page="links" posts={posts} client:media="(min-width: 769px)" />
+  <MobileApp page="links" posts={posts} client:media="(max-width: 768px)" />
+</Layout>

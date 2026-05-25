@@ -1,0 +1,31 @@
+{
+  "name": "goblog-astro",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "A clean, elegant Astro blog theme with three-column PC layout, dark mode, and Shiki syntax highlighting.",
+  "keywords": [
+    "astro",
+    "astro-theme",
+    "blog",
+    "theme"
+  ],
+  "engines": {
+    "node": ">=18.14.1"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "new": "node scripts/new-post.mjs"
+  },
+  "dependencies": {
+    "@astrojs/react": "^3.6.3",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.2.1",
+    "astro": "^4.16.19",
+    "lunar-javascript": "^1.7.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

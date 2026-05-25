@@ -1,0 +1,62 @@
+---
+import { config } from '../config.js';
+const {
+  title = config.site.name,
+  description = `${config.site.name} —— ${config.site.description}`,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:site_name" content={config.site.name} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="generator" content={Astro.generator} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="alternate" type="application/rss+xml" title={config.site.name} href="/rss.xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/pc.css">
+  <link rel="stylesheet" href="/styles/mobile.css">
+  <style is:global define:vars={config.theme}>
+    :root {
+      --pc-accent:      var(--accent);
+      --pc-page-active: var(--accent);
+      --pc-side:        var(--sidebar);
+      --pc-bg:          var(--bgLight);
+      --bg:             var(--bgLight);
+      --drawer:         var(--sidebar);
+    }
+    body              { background: var(--bgLight); }
+    .dark body        { background: var(--bgDark); }
+    .dark .pc         { --pc-bg: var(--bgDark); }
+    .dark             { --bg: var(--bgDark); }
+  </style>
+  <script is:inline>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <slot />
+</body>
+</html>
