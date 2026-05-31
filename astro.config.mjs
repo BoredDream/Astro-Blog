@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import { config } from './src/config.js';
 
@@ -20,8 +19,17 @@ function rehypeLazyImages() {
 
 export default defineConfig({
   site: config.site.url,
-  integrations: [react(), sitemap()],
+  integrations: [sitemap()],
   output: 'static',
+  // 链接进入视口即预取，点击近乎瞬开。
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport',
+  },
+  // 允许对远程图片（字符串封面/头像）做优化处理。
+  image: {
+    remotePatterns: [{ protocol: 'https' }],
+  },
   markdown: {
     shikiConfig: {
       themes: {

@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import PCApp from '../../components/pc/PCApp.jsx';
-import MobileApp from '../../components/mobile/MobileApp.jsx';
+import PCShell from '../../components/pc/PCShell.astro';
+import MobileShell from '../../components/mobile/MobileShell.astro';
 import { getPosts } from '../../lib/posts.js';
 import { config } from '../../config.js';
 
@@ -20,6 +20,6 @@ const { pageNum } = Astro.props;
 const posts = await getPosts();
 ---
 <Layout title={`第 ${pageNum} 页 · ${config.site.name}`}>
-  <PCApp page="home" posts={posts} pageNum={pageNum} client:media="(min-width: 769px)" />
-  <MobileApp page="home" posts={posts} pageNum={pageNum} client:media="(max-width: 768px)" />
+  <PCShell page="home" posts={posts} pageNum={pageNum} />
+  <MobileShell page="home" posts={posts} pageNum={pageNum} />
 </Layout>

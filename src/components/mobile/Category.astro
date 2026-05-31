@@ -1,0 +1,27 @@
+---
+import Footer from './Footer.astro';
+import { tagUrl } from '../../lib/urls.js';
+
+interface Props { posts: any[]; }
+const { posts } = Astro.props;
+
+const tagMap: Record<string, number> = {};
+posts.forEach((p) => (p.tags || []).forEach((tag: string) => { tagMap[tag] = (tagMap[tag] || 0) + 1; }));
+const cats = Object.entries(tagMap).sort((a, b) => b[1] - a[1]);
+---
+<div class="inner-page">
+  <div class="inner-page-head">
+    <h2 class="inner-page-title serif">分类</h2>
+    <span class="inner-page-count">{cats.length} 个</span>
+  </div>
+  <div class="cat-list">
+    {cats.map(([name, count]) => (
+      <a class="cat-item" href={tagUrl(name)}>
+        <span class="cat-name serif"># {name}</span>
+        <span class="cat-count">{count} 篇</span>
+      </a>
+    ))}
+  </div>
+  <div class="foot-pad"></div>
+  <Footer />
+</div>

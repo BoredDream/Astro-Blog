@@ -1,0 +1,26 @@
+---
+import { postUrl } from '../../lib/urls.js';
+
+interface Props { posts: any[]; tag: string; }
+const { posts, tag } = Astro.props;
+const filtered = posts.filter((p) => p.tags.includes(tag));
+---
+<div class="inner-page">
+  <div class="inner-page-head">
+    <a href="/categories" style="display:inline-flex;align-items:center;color:var(--ink-3);margin-right:4px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+    </a>
+    <h2 class="inner-page-title serif">#{tag}</h2>
+    <span class="inner-page-count">{filtered.length} 篇</span>
+  </div>
+  <div class="arch-section">
+    {filtered.map((p) => (
+      <a class="arch-entry" href={postUrl(p)}>
+        <span class="arch-entry-day">{p.date.slice(0, 10)}</span>
+        <span class="arch-entry-title">{p.title}</span>
+      </a>
+    ))}
+  </div>
+</div>

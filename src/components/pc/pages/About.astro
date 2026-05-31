@@ -1,0 +1,26 @@
+---
+import Placeholder from '../../shared/Placeholder.astro';
+import { config } from '../../../config.js';
+---
+<div class="pc-about">
+  <div class="pc-about-hero">
+    <div class="pc-about-avatar">
+      <Placeholder variant={config.author.avatar || 1} label="portrait" />
+    </div>
+    <div>
+      <div class="pc-about-name serif">{config.author.name}</div>
+      <div class="pc-about-tagline">{config.author.tagline}</div>
+      <div class="pc-about-stats">
+        {config.author.stats.map((s) => (
+          <div class="pc-about-stat">
+            <div class="pc-about-stat-num serif">{s.num}</div>
+            <div class="pc-about-stat-label">{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+  <div class="pc-about-body">
+    {config.author.bio.map((para) => <p>{para}</p>)}
+  </div>
+</div>

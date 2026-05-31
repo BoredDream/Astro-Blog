@@ -1,12 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import PCApp from '../components/pc/PCApp.jsx';
-import MobileApp from '../components/mobile/MobileApp.jsx';
+import PCShell from '../components/pc/PCShell.astro';
+import MobileShell from '../components/mobile/MobileShell.astro';
 import { getPosts } from '../lib/posts.js';
+import { config } from '../config.js';
 
 const posts = await getPosts();
 ---
-<Layout title="关于 · 字间·书吟" description="关于字间·书吟和它的作者。">
-  <PCApp page="about" posts={posts} client:media="(min-width: 769px)" />
-  <MobileApp page="about" posts={posts} client:media="(max-width: 768px)" />
+<Layout title={`关于 · ${config.site.name}`} description={`关于${config.site.name}和它的作者。`}>
+  <PCShell page="about" posts={posts} />
+  <MobileShell page="about" posts={posts} />
 </Layout>

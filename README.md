@@ -8,12 +8,14 @@
 
 ## 功能特性
 
-- **双端布局**：PC 三栏（侧栏 + 内容 + 右侧挂件）& 移动端抽屉导航，通过 Astro `client:media` 条件渲染
+- **零运行时 JS**：纯 Astro 静态渲染 + 少量原生 JS 增强，整站交互脚本仅约 11 KB（无前端框架运行时）
+- **双端布局**：PC 三栏（侧栏 + 内容 + 右侧挂件）& 移动端抽屉导航，由断点 CSS 控制显隐
 - **暗色模式**：基于 `localStorage` 持久化，切换无闪烁
 - **代码高亮**：Shiki 双主题（`github-light` / `github-dark`），随暗色模式自动切换
 - **全文搜索**：客户端搜索，覆盖标题、标签、摘要，无需后端
 - **RSS & Sitemap**：自动生成，开箱即用
-- **SEO 优化**：Canonical 链接、Open Graph、Twitter Card
+- **SEO 优化**：Canonical、Open Graph（文章 `og:type=article` + `og:image`）、Twitter Card、JSON-LD 结构化数据
+- **导航预取**：链接进入视口即预取，点击近乎瞬开
 - **主题色可配置**：在 `src/config.js` 中修改主色、侧栏色、背景色
 - **标签分类 & 归档**：按标签过滤、按年月归档
 - **阅读时间**：自动计算（字数 ÷ 300）
@@ -155,8 +157,9 @@ excerpt: "自定义摘要（可选，不填则自动截取正文）"
 
 ## 技术栈
 
-- [Astro](https://astro.build/) v4 — 静态站点生成框架
-- [React](https://react.dev/) v18 — 交互组件（仅客户端增强）
+- [Astro](https://astro.build/) v4 — 静态站点生成框架（页面零运行时 JS）
+- 原生 JavaScript — 主题切换、灯箱、搜索等交互增强（`src/scripts/`，无框架依赖）
+- [lunar-javascript](https://github.com/6tail/lunar-javascript) — 侧栏农历日历（仅构建期使用，不进客户端）
 - [@astrojs/rss](https://docs.astro.build/zh-cn/guides/rss/) — RSS 生成
 - [@astrojs/sitemap](https://docs.astro.build/zh-cn/guides/integrations-guide/sitemap/) — Sitemap 生成
 - [Shiki](https://shiki.style/) — 代码语法高亮

@@ -1,0 +1,21 @@
+---
+import { tagUrl } from '../../lib/urls.js';
+
+interface Props { posts: any[]; }
+const { posts } = Astro.props;
+const allTags = [...new Set(posts.flatMap((p) => p.tags))].slice(0, 12);
+---
+<div data-search-root>
+  <div class="search-bar">
+    <input class="search-input" placeholder="输入关键词搜索…" data-search-input autofocus />
+    <button class="search-cancel" data-search-cancel>取消</button>
+  </div>
+  <div class="search-hot-tags" data-search-hot>
+    <div class="search-hot-label">热门标签</div>
+    <div class="article-tags" style="flex-wrap:wrap;gap:8px">
+      {allTags.map((t) => <a class="tag" href={tagUrl(t)}>{t}</a>)}
+    </div>
+  </div>
+  <div class="search-empty" data-search-empty hidden>未找到相关文章</div>
+  <div data-search-results></div>
+</div>

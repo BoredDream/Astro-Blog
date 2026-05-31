@@ -1,0 +1,70 @@
+---
+import { Solar } from 'lunar-javascript';
+import { postUrl, tagUrl } from '../../lib/urls.js';
+import { config } from '../../config.js';
+
+interface Props {
+  posts: any[];
+}
+const { posts } = Astro.props;
+
+const recent = posts ? posts.slice(0, 5) : [];
+const allTags = posts ? [...new Set(posts.flatMap((p) => p.tags))].slice(0, 12) : [];
+
+// 日历 + 每日格言：在构建期用 lunar-javascript 计算，农历库不进客户端包。
+// 注意：日期固定为构建时刻，按需重建即可保持新鲜。
+const MONTHS = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+const WEEKDAYS = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+const now = new Date();
+const lunar = Solar.fromDate(now).getLunar();
+const yi = lunar.getDayYi();
+const dayOfYear = Math.floor((now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000);
+const quote = config.quotes[dayOfYear % config.quotes.length];
+const cal = {
+  month: MONTHS[now.getMonth()],
+  weekday: WEEKDAYS[now.getDay()],
+  day: now.getDate().toString(),
+  lunarDate: `${lunar.getYearInGanZhi()}年 ${lunar.getMonthInChinese()}月${lunar.getDayInChinese()}`,
+  auspicious: yi.length > 0 ? `宜${yi[0]}` : '诸事皆宜',
+  quote: quote.text,
+  quoteAuthor: quote.author,
+};
+---
+<aside class="pc-rail">
+  <div class="pc-search">
+    <input type="text" placeholder="文章寻踪（输入后回车）" data-rail-search />
+  </div>
+
+  <div class="pc-widget">
+    <div class="pc-widget-head">流年拾忆</div>
+    <ul class="pc-recent">
+      {recent.map((p) => (
+        <li><a href={postUrl(p)}>{p.title}</a></li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="pc-widget">
+    <div class="pc-widget-head">文踪墨迹</div>
+    <div class="pc-tags">
+      {allTags.map((t) => (
+        <a class="pc-tag" href={tagUrl(t)}>{t}</a>
+      ))}
+    </div>
+  </div>
+
+  <div class="pc-widget">
+    <div class="pc-widget-head">时光只言</div>
+    <div class="pc-cal">
+      <div class="pc-cal-head">
+        <span>{cal.month}</span>
+        <span>{cal.lunarDate}</span>
+        <span>{cal.weekday}</span>
+      </div>
+      <div class="pc-cal-day">{cal.day}</div>
+      <div class="pc-cal-yi">{cal.auspicious}</div>
+      <div class="pc-cal-quote">{cal.quote}</div>
+      <div class="pc-cal-author">{cal.quoteAuthor}</div>
+    </div>
+  </div>
+</aside>

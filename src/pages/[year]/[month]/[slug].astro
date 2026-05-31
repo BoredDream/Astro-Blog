@@ -1,9 +1,10 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import PCApp from '../../../components/pc/PCApp.jsx';
-import MobileApp from '../../../components/mobile/MobileApp.jsx';
+import PCShell from '../../../components/pc/PCShell.astro';
+import MobileShell from '../../../components/mobile/MobileShell.astro';
 import { getBlogEntries, getPosts } from '../../../lib/posts.js';
 import { postParams } from '../../../lib/urls.js';
+import { config } from '../../../config.js';
 
 export async function getStaticPaths() {
   const entries = await getBlogEntries();
@@ -18,25 +19,43 @@ const posts = await getPosts();
 const post = posts.find((p) => p.id === entry.slug);
 const { Content, headings } = await entry.render();
 const readMin = Math.max(1, Math.ceil(entry.body.replace(/\s+/g, '').length / 300));
+
+// SEO：字符串封面作为社交分享图；日期转 ISO。
+const ogImage = typeof post.cover === 'string' ? post.cover : undefined;
+const toISO = (d) => new Date(String(d).replace(' ', 'T')).toISOString();
+const publishedTime = toISO(post.date);
+const modifiedTime = post.updated ? toISO(post.updated) : undefined;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.title,
+  description: post.excerpt || post.title,
+  datePublished: publishedTime,
+  ...(modifiedTime ? { dateModified: modifiedTime } : {}),
+  author: { '@type': 'Person', name: config.author.name },
+  publisher: { '@type': 'Organization', name: config.site.name },
+  keywords: (post.tags || []).join(', '),
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  ...(ogImage ? { image: new URL(ogImage, Astro.site).href } : {}),
+};
 ---
-<Layout title={`${post.title} · 字间·书吟`} description={post.excerpt || post.title}>
-  <PCApp
-    page="article"
-    posts={posts}
-    post={post}
-    headings={headings}
-    readMin={readMin}
-    client:media="(min-width: 769px)"
-  >
+<Layout
+  title={`${post.title} · ${config.site.name}`}
+  description={post.excerpt || post.title}
+  type="article"
+  image={ogImage}
+  publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
+  tags={post.tags}
+  jsonLd={jsonLd}
+>
+  <PCShell page="article" posts={posts} post={post} headings={headings} readMin={readMin}>
     <Content />
-  </PCApp>
-  <MobileApp
-    page="article"
-    posts={posts}
-    post={post}
-    readMin={readMin}
-    client:media="(max-width: 768px)"
-  >
+  </PCShell>
+  <MobileShell page="article" posts={posts} post={post} readMin={readMin}>
     <Content />
-  </MobileApp>
+  </MobileShell>
+  <script>import '../../../scripts/article.js';</script>
 </Layout>

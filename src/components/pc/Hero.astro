@@ -1,0 +1,29 @@
+---
+import Placeholder from '../shared/Placeholder.astro';
+import PostFlags from '../shared/PostFlags.astro';
+import { postUrl } from '../../lib/urls.js';
+
+interface Props {
+  posts: any[];
+}
+const { posts } = Astro.props;
+const [hero, ...side] = posts;
+---
+{hero && (
+  <div class="pc-hero">
+    <a class="pc-hero-main" href={postUrl(hero)}>
+      <div class="pc-hero-img"><Placeholder variant={hero.cover} label={hero.coverLabel} /></div>
+      <PostFlags post={hero} />
+      <div class="pc-hero-title">{hero.title}</div>
+    </a>
+    <div class="pc-hero-side">
+      {side.map((p) => (
+        <a class="pc-hero-tile" href={postUrl(p)}>
+          <div class="pc-hero-img"><Placeholder variant={p.cover} label={p.coverLabel} /></div>
+          <PostFlags post={p} />
+          <div class="pc-hero-title">{p.title}</div>
+        </a>
+      ))}
+    </div>
+  </div>
+)}

@@ -1,12 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import PCApp from '../components/pc/PCApp.jsx';
-import MobileApp from '../components/mobile/MobileApp.jsx';
+import PCShell from '../components/pc/PCShell.astro';
+import MobileShell from '../components/mobile/MobileShell.astro';
 import { getPosts } from '../lib/posts.js';
+import { config } from '../config.js';
 
 const posts = await getPosts();
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: config.site.name,
+  description: config.site.description,
+  url: config.site.url,
+};
 ---
-<Layout>
-  <PCApp page="home" posts={posts} pageNum={1} client:media="(min-width: 769px)" />
-  <MobileApp page="home" posts={posts} pageNum={1} client:media="(max-width: 768px)" />
+<Layout jsonLd={jsonLd}>
+  <PCShell page="home" posts={posts} pageNum={1} />
+  <MobileShell page="home" posts={posts} pageNum={1} />
 </Layout>

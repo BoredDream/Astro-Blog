@@ -1,0 +1,13 @@
+---
+import { config } from '../../config.js';
+const YEAR = new Date().getFullYear();
+---
+<div class="pc-footer">
+  <div>Copyright © {config.footer.since}–{YEAR} {config.site.name}</div>
+  {config.footer.icp && <div>{config.footer.icp}</div>}
+  <div style="margin-top:4px;font-size:12px;opacity:0.75">
+    <a href="/rss.xml" style="color:inherit">RSS</a>
+    {' · '}
+    <a href="/sitemap-index.xml" style="color:inherit">站点地图</a>
+  </div>
+</div>

@@ -1,0 +1,178 @@
+---
+import Placeholder from '../shared/Placeholder.astro';
+import { postUrl, tagUrl } from '../../lib/urls.js';
+
+interface Props {
+  post: any;
+  posts: any[];
+  prevPost?: any;
+  nextPost?: any;
+  headings?: { depth: number; slug: string; text: string }[];
+  readMin?: number;
+}
+const { post, posts, prevPost, nextPost, headings = [], readMin } = Astro.props;
+
+const related = posts
+  ? posts.filter((p) => p.id !== post.id && p.tags.some((t: string) => post.tags.includes(t))).slice(0, 2)
+  : [];
+const hasHeadings = headings && headings.length > 0;
+const likeCount = post.likes || 0;
+---
+<div class="pc-center">
+  <div class="reading-progress" aria-hidden="true" style="width:0%" data-reading-progress="window"></div>
+  <article class="pc-article">
+    <header class="pc-article-head">
+      <h1 class="pc-article-title">{post.title}</h1>
+      <div class="pc-article-meta">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span class="pc-article-date">{post.date}</span>
+          {post.updated && post.updated.slice(0, 10) !== String(post.date).slice(0, 10) && (
+            <span class="pc-article-updated">更新于 {post.updated.slice(0, 10)}</span>
+          )}
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          {readMin && <span class="pc-article-read-time">约 {readMin} 分钟</span>}
+          {post.tags && post.tags[0] && (
+            <a class="pc-article-cat" href={tagUrl(post.tags[0])}>{post.tags[0]}</a>
+          )}
+        </div>
+      </div>
+    </header>
+
+    <div class="pc-article-cover">
+      <Placeholder variant={post.cover} label={post.coverLabel} />
+    </div>
+
+    {post.audio && (
+      <div
+        class="pc-article-player"
+        data-audio-player
+        data-audio-url={post.audio.audioUrl || ''}
+        data-netease-id={post.audio.neteaseId || ''}
+      >
+        <audio data-audio-el></audio>
+        <div class="player-cover">
+          <Placeholder variant={post.audio.cover || 1} label="audio" />
+          <button class="player-play" data-audio-toggle aria-label="play">
+            <svg class="icon-play" width="12" height="12" viewBox="0 0 24 24" fill="#1a1d29"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="icon-pause" width="12" height="12" viewBox="0 0 24 24" fill="#1a1d29" style="display:none"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          </button>
+        </div>
+        <div class="player-body">
+          <div>
+            <div class="player-track">
+              <span class="tname">{post.audio.title}</span>
+              <span class="tartist">- {post.audio.artist}</span>
+            </div>
+            {post.audio.lyrics && <div class="player-lyrics">{post.audio.lyrics}</div>}
+          </div>
+          <div class="player-bar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--pc-ink-3)">
+              <path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+            <span class="player-time" data-audio-time>00:00 / 00:00</span>
+            <div class="player-bar-track" data-audio-seek>
+              <div class="player-bar-fill" data-audio-fill style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
+    <div class="pc-article-body" data-article-body>
+      <slot />
+    </div>
+
+    {post.endImage && (
+      <div class="pc-article-end-image">
+        <Placeholder variant={post.endImage.cover} label={post.endImage.label || 'closing image'} />
+      </div>
+    )}
+
+    <div class="pc-article-actions">
+      <button class="pc-article-like" data-like-btn data-post-id={post.id} data-like-count={likeCount}>
+        <span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round">
+            <path d="M12 21s-7-4.5-9.5-9.2C.7 8 2.5 4 6.4 4c2 0 3.6 1.1 4.6 2.6C12 5.1 13.6 4 15.6 4c3.9 0 5.7 4 3.9 7.8C19 16.5 12 21 12 21z"/>
+          </svg>
+        </span>
+        <span data-like-num>{likeCount}</span>
+      </button>
+      <div class="pc-article-share">
+        <button class="pc-share-btn" data-copy-link title="复制链接">
+          <span class="pc-share-tip">已复制</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    {related.length > 0 && (
+      <div class="pc-article-related">
+        <div class="pc-article-related-title">相关文章</div>
+        <div class="pc-article-related-grid">
+          {related.map((p) => (
+            <a class="pc-article-related-card" href={postUrl(p)}>
+              <div class="pc-article-related-img">
+                <Placeholder variant={p.cover} label={p.coverLabel} />
+              </div>
+              <div class="pc-article-related-name">{p.title}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {(prevPost || nextPost) && (
+      <div class="pc-article-nav">
+        {prevPost ? (
+          <a class="pc-article-nav-item prev" href={postUrl(prevPost)}>
+            <div class="pc-article-nav-label">← 上一篇</div>
+            <div class="pc-article-nav-name">{prevPost.title}</div>
+          </a>
+        ) : (
+          <div class="pc-article-nav-item prev" style="opacity:0.3">
+            <div class="pc-article-nav-label">← 上一篇</div>
+          </div>
+        )}
+        {nextPost ? (
+          <a class="pc-article-nav-item next" href={postUrl(nextPost)}>
+            <div class="pc-article-nav-label">下一篇 →</div>
+            <div class="pc-article-nav-name">{nextPost.title}</div>
+          </a>
+        ) : (
+          <div class="pc-article-nav-item next" style="opacity:0.3">
+            <div class="pc-article-nav-label">下一篇 →</div>
+          </div>
+        )}
+      </div>
+    )}
+  </article>
+
+  {hasHeadings && (
+    <>
+      <button class="pc-toc-bubble" data-toc-open aria-label="打开目录" title="目录">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+        </svg>
+      </button>
+      <div class="pc-toc-scrim" data-toc-close></div>
+      <aside class="pc-toc-panel" aria-hidden="true">
+        <div class="pc-toc-panel-head">
+          <span class="pc-toc-panel-title serif">目录</span>
+          <button class="pc-toc-close" data-toc-close aria-label="关闭目录">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <nav class="pc-toc-panel-list">
+          {headings.map((h) => (
+            <a class={`pc-toc-item h${h.depth}`} href={`#${h.slug}`} data-toc-link>{h.text}</a>
+          ))}
+        </nav>
+      </aside>
+    </>
+  )}
+</div>

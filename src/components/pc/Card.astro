@@ -1,0 +1,41 @@
+---
+import Placeholder from '../shared/Placeholder.astro';
+import PostFlags from '../shared/PostFlags.astro';
+import { postUrl } from '../../lib/urls.js';
+
+interface Props {
+  post: any;
+}
+const { post } = Astro.props;
+---
+<a class="pc-card" href={postUrl(post)}>
+  <div class="pc-card-img">
+    {post.tags && post.tags[0] && <div class="pc-card-cat">{post.tags[0]}</div>}
+    <PostFlags post={post} />
+    <Placeholder variant={post.cover} label={post.coverLabel} />
+  </div>
+  <div class="pc-card-body">
+    <div>
+      <h3 class="pc-card-title">{post.title}</h3>
+      {post.excerpt && <p class="pc-card-excerpt">{post.excerpt}</p>}
+    </div>
+    <div class="pc-card-foot">
+      <span>{post.relTime || '1 月前'}</span>
+      <div class="pc-card-meta">
+        <span class="m">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          {post.views}
+        </span>
+        <span class="m">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21s-7-4.5-9.5-9.2C.7 8 2.5 4 6.4 4c2 0 3.6 1.1 4.6 2.6C12 5.1 13.6 4 15.6 4c3.9 0 5.7 4 3.9 7.8C19 16.5 12 21 12 21z"/>
+          </svg>
+          {post.likes}
+        </span>
+      </div>
+    </div>
+  </div>
+</a>

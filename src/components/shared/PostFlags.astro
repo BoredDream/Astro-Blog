@@ -1,0 +1,14 @@
+---
+// 文章角标：置顶 / 草稿。两者皆无则不渲染。
+interface Props {
+  post: { pinned?: boolean; draft?: boolean };
+}
+const { post } = Astro.props;
+const show = post && (post.pinned || post.draft);
+---
+{show && (
+  <div class="post-flags">
+    {post.pinned && <span class="post-flag pinned">置顶</span>}
+    {post.draft && <span class="post-flag draft">草稿</span>}
+  </div>
+)}

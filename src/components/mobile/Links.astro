@@ -1,0 +1,31 @@
+---
+import Placeholder from '../shared/Placeholder.astro';
+import Footer from './Footer.astro';
+import { LINKS, hostOf } from '../../data/links.js';
+---
+<div class="inner-page">
+  <div class="inner-page-head">
+    <h2 class="inner-page-title serif">友链</h2>
+    <span class="inner-page-count">{LINKS.length} 个</span>
+  </div>
+  <div class="links-grid">
+    {LINKS.map((l) => (
+      <a class="links-card" href={l.url} target="_blank" rel="noopener noreferrer">
+        <div class="links-img-area">
+          <Placeholder variant={l.variant} label="" />
+        </div>
+        <div class="links-text-area">
+          <div class="links-name">{l.name}</div>
+          <div class="links-desc">{l.desc}</div>
+          <div class="links-host">
+            <span>{hostOf(l.url)}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17L17 7M8 7h9v9" />
+            </svg>
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+  <Footer />
+</div>

@@ -1,0 +1,17 @@
+---
+import Card from './Card.astro';
+import Pagination from '../shared/Pagination.astro';
+import Footer from './Footer.astro';
+
+interface Props {
+  posts: any[];
+  pageNum?: number;
+  totalPages?: number;
+}
+const { posts, pageNum = 1, totalPages = 1 } = Astro.props;
+---
+<div class="pc-list">
+  {posts.map((p) => <Card post={p} />)}
+</div>
+<Pagination current={pageNum} total={totalPages} class="pc-pagination" />
+<Footer />

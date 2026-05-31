@@ -1,0 +1,14 @@
+---
+import BrandMark from '../shared/BrandMark.astro';
+import { config } from '../../config.js';
+const brandName = config.site.name;
+---
+<div class="header">
+  <a class="brand" href="/">
+    <BrandMark size={38} />
+    <div class="brand-title serif">{brandName}</div>
+  </a>
+  <button class="hamburger" data-drawer-open aria-label="menu">
+    <span></span><span></span><span></span>
+  </button>
+</div>

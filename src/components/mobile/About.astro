@@ -1,0 +1,36 @@
+---
+import Placeholder from '../shared/Placeholder.astro';
+import Footer from './Footer.astro';
+import { config } from '../../config.js';
+---
+<div class="inner-page">
+  <div class="inner-page-head">
+    <h2 class="inner-page-title serif">关于</h2>
+  </div>
+
+  <div class="about-hero">
+    <div class="about-avatar">
+      <Placeholder variant={config.author.avatar || 1} label="portrait" />
+    </div>
+    <div class="about-info">
+      <div class="about-name serif">{config.author.name}</div>
+      <div class="about-tagline">{config.author.tagline}</div>
+    </div>
+  </div>
+
+  <div class="about-stats">
+    {config.author.stats.map((s) => (
+      <div class="about-stat">
+        <div class="about-stat-num serif">{s.num}</div>
+        <div class="about-stat-label">{s.label}</div>
+      </div>
+    ))}
+  </div>
+
+  <div class="about-body">
+    {config.author.bio.map((para) => <p>{para}</p>)}
+  </div>
+
+  <div class="foot-pad"></div>
+  <Footer />
+</div>

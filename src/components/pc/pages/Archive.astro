@@ -1,0 +1,41 @@
+---
+import Footer from '../Footer.astro';
+import { postUrl } from '../../../lib/urls.js';
+
+interface Props { posts: any[]; }
+const { posts } = Astro.props;
+
+const sorted = [...posts].sort((a, b) => b.date.localeCompare(a.date));
+const groupMap: Record<string, any[]> = {};
+sorted.forEach((p) => {
+  const [datePart] = p.date.split(' ');
+  const [yr, mo] = datePart.split('-');
+  const key = `${yr}年${parseInt(mo, 10)}月`;
+  (groupMap[key] ||= []).push(p);
+});
+const groups = Object.entries(groupMap);
+---
+<div class="pc-center">
+  <div class="pc-inner-head">
+    <h2 class="pc-inner-title serif">归档</h2>
+    <span class="pc-inner-count">共 {posts.length} 篇</span>
+  </div>
+  {groups.map(([month, ps]) => (
+    <div class="pc-arch-section">
+      <div class="pc-arch-month-head">
+        <span class="pc-arch-month-label">{month}</span>
+        <span class="pc-arch-month-count">{ps.length} 篇</span>
+      </div>
+      {ps.map((p) => {
+        const day = p.date.split(' ')[0].split('-')[2];
+        return (
+          <a class="pc-arch-entry" href={postUrl(p)}>
+            <span class="pc-arch-entry-day">{day}</span>
+            <span class="pc-arch-entry-title serif">{p.title}</span>
+          </a>
+        );
+      })}
+    </div>
+  ))}
+  <Footer />
+</div>

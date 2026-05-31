@@ -1,0 +1,145 @@
+---
+import Placeholder from '../shared/Placeholder.astro';
+import { postUrl, tagUrl } from '../../lib/urls.js';
+
+interface Props {
+  post: any;
+  posts: any[];
+  prevPost?: any;
+  nextPost?: any;
+  readMin?: number;
+}
+const { post, posts, prevPost, nextPost, readMin } = Astro.props;
+
+const related = posts
+  ? posts.filter((p) => p.id !== post.id && p.tags.some((t: string) => post.tags.includes(t))).slice(0, 2)
+  : [];
+const likeCount = post.likes || 0;
+---
+<div>
+  <div class="reading-progress" aria-hidden="true" style="width:0%" data-reading-progress=".app-scroll"></div>
+  <header class="article-head">
+    <h1 class="article-title serif">{post.title}</h1>
+    <div class="article-date" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span>{post.date}</span>
+      {post.updated && post.updated.slice(0, 10) !== String(post.date).slice(0, 10) && (
+        <span style="color:var(--ink-4);font-size:12px">更新于 {post.updated.slice(0, 10)}</span>
+      )}
+      {readMin && <span style="color:var(--ink-4);font-size:12px">约 {readMin} 分钟</span>}
+    </div>
+    <div class="article-tags">
+      {post.tags.map((t: string) => <a class="tag" href={tagUrl(t)}>{t}</a>)}
+    </div>
+  </header>
+
+  <div class="article-cover">
+    <Placeholder variant={post.cover} label={post.coverLabel} />
+  </div>
+
+  <div class="article-body" data-article-body>
+    <slot />
+  </div>
+
+  {post.audio && (
+    <div
+      class="player"
+      data-audio-player
+      data-audio-url={post.audio.audioUrl || ''}
+      data-netease-id={post.audio.neteaseId || ''}
+    >
+      <audio data-audio-el></audio>
+      <div class="player-cover">
+        <Placeholder variant={post.audio.cover} label="audio art" />
+        <button class="player-play" data-audio-toggle style="position:absolute" aria-label="play">
+          <svg class="icon-play" width="14" height="14" viewBox="0 0 24 24" fill="#1a1d29"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="icon-pause" width="14" height="14" viewBox="0 0 24 24" fill="#1a1d29" style="display:none"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        </button>
+      </div>
+      <div class="player-body">
+        <div>
+          <div class="player-track-info">
+            <span class="tname serif">{post.audio.title}</span>
+            <span class="tartist">- {post.audio.artist}</span>
+          </div>
+          <div class="player-meta">
+            <div>作词：{post.audio.lyricist || '无'}</div>
+            <div>作曲：{post.audio.composer || '无'}</div>
+          </div>
+        </div>
+        <div class="player-bar">
+          <div class="player-bar-track" data-audio-seek>
+            <div class="player-bar-fill" data-audio-fill style="width:0%"></div>
+          </div>
+          <div class="player-time" data-audio-time>00:00 / 00:00</div>
+        </div>
+      </div>
+    </div>
+  )}
+
+  {post.endImage && (
+    <div class="article-end-image">
+      <Placeholder variant={post.endImage.cover} label={post.endImage.label || 'closing image'} />
+    </div>
+  )}
+
+  <div class="article-like-wrap">
+    <button class="article-like" data-like-btn data-post-id={post.id} data-like-count={likeCount} aria-label="like">
+      <span class="heart">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round">
+          <path d="M12 21s-7-4.5-9.5-9.2C.7 8 2.5 4 6.4 4c2 0 3.6 1.1 4.6 2.6C12 5.1 13.6 4 15.6 4c3.9 0 5.7 4 3.9 7.8C19 16.5 12 21 12 21z"/>
+        </svg>
+      </span>
+      <span class="count" data-like-num>{likeCount}</span>
+    </button>
+  </div>
+
+  <div class="article-share">
+    <button class="article-share-btn" data-copy-link title="复制链接">
+      <span class="article-share-tip">已复制</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+    </button>
+  </div>
+
+  {related.length > 0 && (
+    <div class="article-related">
+      <div class="article-related-title">相关文章</div>
+      <div class="article-related-grid">
+        {related.map((p) => (
+          <a class="article-related-card" href={postUrl(p)}>
+            <div class="article-related-img">
+              <Placeholder variant={p.cover} label={p.coverLabel} />
+            </div>
+            <div class="article-related-name">{p.title}</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {(prevPost || nextPost) && (
+    <div class="article-nav">
+      {prevPost ? (
+        <a class="article-nav-item prev" href={postUrl(prevPost)}>
+          <div class="article-nav-label">← 上一篇</div>
+          <div class="article-nav-name">{prevPost.title}</div>
+        </a>
+      ) : (
+        <div class="article-nav-item prev disabled" style="opacity:0.3">
+          <div class="article-nav-label">← 上一篇</div>
+        </div>
+      )}
+      {nextPost ? (
+        <a class="article-nav-item next" href={postUrl(nextPost)}>
+          <div class="article-nav-label">下一篇 →</div>
+          <div class="article-nav-name">{nextPost.title}</div>
+        </a>
+      ) : (
+        <div class="article-nav-item next disabled" style="opacity:0.3">
+          <div class="article-nav-label">下一篇 →</div>
+        </div>
+      )}
+    </div>
+  )}
+</div>

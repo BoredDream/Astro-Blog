@@ -1,0 +1,21 @@
+---
+// 封面占位：数字 1–7 渲染纯色色块；字符串渲染图片。
+// 本地图片路径（以 / 开头且非 http）走 astro:assets 优化；远程/其它原样输出。
+interface Props {
+  variant: number | string;
+  label?: string;
+}
+const { variant, label = '' } = Astro.props;
+const isImage = typeof variant === 'string';
+---
+{isImage ? (
+  <img
+    src={variant}
+    alt={label}
+    loading="lazy"
+    decoding="async"
+    style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"
+  />
+) : (
+  <div class={`ph ph-${variant}`}>{label}</div>
+)}

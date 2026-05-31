@@ -1,0 +1,72 @@
+---
+import Sidebar from './Sidebar.astro';
+import Rail from './Rail.astro';
+import Hero from './Hero.astro';
+import Feed from './Feed.astro';
+import Article from './Article.astro';
+import Category from './pages/Category.astro';
+import Archive from './pages/Archive.astro';
+import About from './pages/About.astro';
+import Links from './pages/Links.astro';
+import Tag from './pages/Tag.astro';
+import Search from './pages/Search.astro';
+import NotFound from './pages/NotFound.astro';
+import { config } from '../../config.js';
+
+interface Props {
+  page?: string;
+  posts?: any[];
+  post?: any;
+  tag?: string;
+  headings?: any[];
+  readMin?: number;
+  pageNum?: number;
+}
+const { page = 'home', posts = [], post, tag, headings, readMin, pageNum = 1 } = Astro.props;
+
+const PAGE_SIZE = config.pagination.pageSize;
+const totalPages = Math.ceil(posts.length / PAGE_SIZE);
+const pageStart = (pageNum - 1) * PAGE_SIZE;
+const pagePosts = posts.slice(pageStart, pageStart + PAGE_SIZE);
+const heroPosts = pageNum === 1 ? pagePosts.slice(0, 3) : [];
+const listPosts = pageNum === 1 ? pagePosts.slice(3) : pagePosts;
+
+// 上一篇 / 下一篇（文章页）
+const postIdx = post ? posts.findIndex((p) => p.id === post.id) : -1;
+const prevPost = postIdx > 0 ? posts[postIdx - 1] : null;
+const nextPost = postIdx >= 0 && postIdx < posts.length - 1 ? posts[postIdx + 1] : null;
+
+const NAV_PAGES = ['home', 'category', 'archive', 'about', 'links'];
+const activeNav = page === 'tag' ? 'category' : (NAV_PAGES.includes(page) ? page : null);
+---
+<div class="pc">
+  <Sidebar active={activeNav} />
+  <main class="pc-main">
+    {page === 'home' && pageNum === 1 && <Hero posts={heroPosts} />}
+    <div class="pc-body">
+      {page === 'home' && (
+        <div class="pc-center">
+          <Feed posts={listPosts} pageNum={pageNum} totalPages={totalPages} />
+        </div>
+      )}
+      {page === 'article' && post && (
+        <Article post={post} posts={posts} prevPost={prevPost} nextPost={nextPost} headings={headings} readMin={readMin}>
+          <slot />
+        </Article>
+      )}
+      {page === 'category' && <Category posts={posts} />}
+      {page === 'archive' && <Archive posts={posts} />}
+      {page === 'about' && <About />}
+      {page === 'links' && <Links />}
+      {page === 'search' && <Search posts={posts} />}
+      {page === 'tag' && <Tag posts={posts} tag={tag} />}
+      {page === '404' && <NotFound />}
+      <Rail posts={posts} />
+    </div>
+  </main>
+  <button class="pc-float-top" data-scroll-top data-scroll-watch="window" aria-label="scroll to top">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 19V5M5 12l7-7 7 7"/>
+    </svg>
+  </button>
+</div>

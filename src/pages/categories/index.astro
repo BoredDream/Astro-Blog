@@ -1,12 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import PCApp from '../../components/pc/PCApp.jsx';
-import MobileApp from '../../components/mobile/MobileApp.jsx';
+import PCShell from '../../components/pc/PCShell.astro';
+import MobileShell from '../../components/mobile/MobileShell.astro';
 import { getPosts } from '../../lib/posts.js';
+import { config } from '../../config.js';
 
 const posts = await getPosts();
 ---
-<Layout title="分类 · 字间·书吟" description="按标签浏览字间·书吟的全部文章。">
-  <PCApp page="category" posts={posts} client:media="(min-width: 769px)" />
-  <MobileApp page="category" posts={posts} client:media="(max-width: 768px)" />
+<Layout title={`分类 · ${config.site.name}`} description={`按标签浏览${config.site.name}的全部文章。`}>
+  <PCShell page="category" posts={posts} />
+  <MobileShell page="category" posts={posts} />
 </Layout>
