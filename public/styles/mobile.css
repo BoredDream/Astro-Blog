@@ -64,22 +64,16 @@ body {
 
 /* ---------- Mobile app surface ---------- */
 .app {
-  height: 100dvh;
+  min-height: 100dvh;
   background-color: var(--bg);
   color: var(--ink);
   position: relative;
-  overflow: hidden;
   -webkit-tap-highlight-color: transparent;
 }
+/* 整个文档随 body 滚动，让手机浏览器地址栏可随上滑自动收起 */
 .app-scroll {
-  position: absolute;
-  inset: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: none;
   background: transparent;
 }
-.app-scroll::-webkit-scrollbar { display: none; }
 
 /* ---------- Header ---------- */
 .header {
@@ -142,7 +136,7 @@ body {
 
 /* ---------- Floating widgets ---------- */
 .float-moon {
-  position: absolute;
+  position: fixed;
   right: 18px;
   bottom: 50px;
   z-index: 25;
@@ -475,7 +469,7 @@ body {
 
 /* ---------- Drawer ---------- */
 .drawer-scrim {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.0);
   z-index: 90;
@@ -487,7 +481,7 @@ body {
   pointer-events: auto;
 }
 .drawer {
-  position: absolute;
+  position: fixed;
   inset: 0 36% 0 0;
   background: var(--drawer);
   z-index: 95;
@@ -632,7 +626,7 @@ body {
 
 /* ---------- Scroll-to-top ---------- */
 .float-top {
-  position: absolute;
+  position: fixed;
   right: 18px;
   bottom: 106px;
   z-index: 25;

@@ -9,7 +9,7 @@ document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
   });
 });
 
-// ── 回到顶部（PC 监听 window，移动监听 .app-scroll）──────────────
+// ── 回到顶部（PC 与移动均监听 window，文档随 body 滚动）──────────
 document.querySelectorAll('[data-scroll-top]').forEach((btn) => {
   const watch = btn.getAttribute('data-scroll-watch') || 'window';
   const isWindow = watch === 'window';
