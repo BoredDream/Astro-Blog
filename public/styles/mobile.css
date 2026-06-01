@@ -69,6 +69,7 @@ body {
   color: var(--ink);
   position: relative;
   overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 .app-scroll {
   position: absolute;
@@ -156,6 +157,7 @@ body {
   border: 0;
   cursor: pointer;
   color: var(--ink-2);
+  -webkit-tap-highlight-color: transparent;
   transition: transform 0.4s cubic-bezier(.4,1.5,.4,1);
 }
 .float-moon:hover { transform: scale(1.06); }
@@ -536,7 +538,8 @@ body {
   padding-top: 24px;
   padding-bottom: 8px;
 }
-.drawer-social button {
+.drawer-social button,
+.drawer-social a {
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -549,7 +552,8 @@ body {
   cursor: pointer;
   transition: background 0.2s ease;
 }
-.drawer-social button:hover { background: rgba(255,255,255,0.16); }
+.drawer-social button:hover,
+.drawer-social a:hover { background: rgba(255,255,255,0.16); }
 
 /* ---------- Image placeholders (striped + label) ---------- */
 .ph {
@@ -618,7 +622,7 @@ body {
 /* ---------- Footer ---------- */
 .footer {
   text-align: center;
-  padding: 16px 16px 80px;
+  padding: 16px 16px 32px;
   font-size: 13px;
   color: var(--ink-3);
   line-height: 1.85;
@@ -643,6 +647,7 @@ body {
   border: 0;
   cursor: pointer;
   color: var(--ink-2);
+  -webkit-tap-highlight-color: transparent;
   opacity: 0;
   pointer-events: none;
   transform: translateY(8px);
