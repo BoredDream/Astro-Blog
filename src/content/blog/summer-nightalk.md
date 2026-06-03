@@ -3,7 +3,7 @@ title: "夏日夜话"
 date: "2026-06-03 08:00"
 tags: ["uninversity life","friends"]
 cover: 1
-coverLabel: "cover · "
+coverLabel: "Life · Friends "
 excerpt: ""
 # cover 可填 1–7（纯色占位），或图片路径如 "/images/posts/summer-nightalk/cover.jpg"
 # 推荐封面比例：3:2（列表）/ 16:9（文章详情页）
