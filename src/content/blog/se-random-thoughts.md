@@ -1,5 +1,5 @@
 ---
-title: ""
+title: "软工随想"
 date: "2026-06-05 17:28"
 tags: ["Personality","Dev"]
 cover: 1
