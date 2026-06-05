@@ -1,9 +1,9 @@
 ---
 title: ""
 date: "2026-06-05 17:28"
-tags: []
+tags: ["Personality","Dev"]
 cover: 1
-coverLabel: "cover · "
+coverLabel: "Passion · Inspiration"
 excerpt: ""
 # cover 可填 1–7（纯色占位），或图片路径如 "/images/posts/se-random-thoughts/cover.jpg"
 # 推荐封面比例：3:2（列表）/ 16:9（文章详情页）
