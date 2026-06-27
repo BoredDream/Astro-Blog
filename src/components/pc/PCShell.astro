@@ -11,7 +11,7 @@ import Links from './pages/Links.astro';
 import Tag from './pages/Tag.astro';
 import Search from './pages/Search.astro';
 import NotFound from './pages/NotFound.astro';
-import { config } from '../../config.js';
+import { paginate, getAdjacentPosts } from '../../lib/posts.js';
 
 interface Props {
   page?: string;
@@ -24,17 +24,12 @@ interface Props {
 }
 const { page = 'home', posts = [], post, tag, headings, readMin, pageNum = 1 } = Astro.props;
 
-const PAGE_SIZE = config.pagination.pageSize;
-const totalPages = Math.ceil(posts.length / PAGE_SIZE);
-const pageStart = (pageNum - 1) * PAGE_SIZE;
-const pagePosts = posts.slice(pageStart, pageStart + PAGE_SIZE);
+const { pagePosts, totalPages } = paginate(posts, pageNum);
 const heroPosts = pageNum === 1 ? pagePosts.slice(0, 3) : [];
 const listPosts = pageNum === 1 ? pagePosts.slice(3) : pagePosts;
 
 // 上一篇 / 下一篇（文章页）
-const postIdx = post ? posts.findIndex((p) => p.id === post.id) : -1;
-const prevPost = postIdx > 0 ? posts[postIdx - 1] : null;
-const nextPost = postIdx >= 0 && postIdx < posts.length - 1 ? posts[postIdx + 1] : null;
+const { prevPost, nextPost } = getAdjacentPosts(posts, post);
 
 const NAV_PAGES = ['home', 'category', 'archive', 'about', 'links'];
 const activeNav = page === 'tag' ? 'category' : (NAV_PAGES.includes(page) ? page : null);

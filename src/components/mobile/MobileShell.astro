@@ -10,7 +10,7 @@ import Links from './Links.astro';
 import Tag from './Tag.astro';
 import Search from './Search.astro';
 import NotFound from './NotFound.astro';
-import { config } from '../../config.js';
+import { paginate, getAdjacentPosts } from '../../lib/posts.js';
 
 interface Props {
   page?: string;
@@ -22,14 +22,8 @@ interface Props {
 }
 const { page = 'home', posts = [], post, tag, readMin, pageNum = 1 } = Astro.props;
 
-const PAGE_SIZE = config.pagination.pageSize;
-const totalPages = Math.ceil(posts.length / PAGE_SIZE);
-const pageStart = (pageNum - 1) * PAGE_SIZE;
-const homePosts = posts.slice(pageStart, pageStart + PAGE_SIZE);
-
-const postIdx = post ? posts.findIndex((p) => p.id === post.id) : -1;
-const prevPost = postIdx > 0 ? posts[postIdx - 1] : null;
-const nextPost = postIdx >= 0 && postIdx < posts.length - 1 ? posts[postIdx + 1] : null;
+const { pagePosts: homePosts, totalPages } = paginate(posts, pageNum);
+const { prevPost, nextPost } = getAdjacentPosts(posts, post);
 ---
 <div class="app">
   <div class="app-scroll">

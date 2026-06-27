@@ -1,9 +1,10 @@
 ---
 import { postUrl } from '../../lib/urls.js';
+import { getPostsByTag } from '../../lib/posts.js';
 
 interface Props { posts: any[]; tag: string; }
 const { posts, tag } = Astro.props;
-const filtered = posts.filter((p) => p.tags.includes(tag));
+const filtered = getPostsByTag(posts, tag);
 ---
 <div class="inner-page">
   <div class="inner-page-head">

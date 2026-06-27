@@ -1,4 +1,5 @@
 import { getCollection } from 'astro:content';
+import { config } from '../config.js';
 
 // dev 模式显示草稿，build（生产）时排除草稿。
 const SHOW_DRAFTS = import.meta.env.DEV;
@@ -35,4 +36,32 @@ export async function getPosts() {
     ...e.data,
     excerpt: e.data.excerpt || autoExcerpt(e.body),
   }));
+}
+
+// 文章页的上一篇 / 下一篇（按 posts 当前排序：置顶优先、再日期降序）。
+export function getAdjacentPosts(posts, post) {
+  const idx = post ? posts.findIndex((p) => p.id === post.id) : -1;
+  return {
+    prevPost: idx > 0 ? posts[idx - 1] : null,
+    nextPost: idx >= 0 && idx < posts.length - 1 ? posts[idx + 1] : null,
+  };
+}
+
+// 分页切片（分页逻辑的单一来源，含总页数）。
+export function paginate(posts, pageNum = 1, pageSize = config.pagination.pageSize) {
+  const totalPages = Math.ceil(posts.length / pageSize);
+  const start = (pageNum - 1) * pageSize;
+  return { pagePosts: posts.slice(start, start + pageSize), totalPages, pageNum };
+}
+
+// 标签计数，返回 [name, count][] 按数量降序。
+export function getTagCounts(posts) {
+  const tagMap = {};
+  posts.forEach((p) => (p.tags || []).forEach((tag) => { tagMap[tag] = (tagMap[tag] || 0) + 1; }));
+  return Object.entries(tagMap).sort((a, b) => b[1] - a[1]);
+}
+
+// 按单个标签过滤文章。
+export function getPostsByTag(posts, tag) {
+  return posts.filter((p) => (p.tags || []).includes(tag));
 }

@@ -1,13 +1,12 @@
 ---
 import Footer from './Footer.astro';
 import { tagUrl } from '../../lib/urls.js';
+import { getTagCounts } from '../../lib/posts.js';
 
 interface Props { posts: any[]; }
 const { posts } = Astro.props;
 
-const tagMap: Record<string, number> = {};
-posts.forEach((p) => (p.tags || []).forEach((tag: string) => { tagMap[tag] = (tagMap[tag] || 0) + 1; }));
-const cats = Object.entries(tagMap).sort((a, b) => b[1] - a[1]);
+const cats = getTagCounts(posts);
 ---
 <div class="inner-page">
   <div class="inner-page-head">
