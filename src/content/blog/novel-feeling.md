@@ -5,7 +5,7 @@ tags: ["爱情", "成长", "随感"]
 cover: 1
 coverLabel: "love · growth"
 excerpt: ""
-# cover 可填 1–7（纯色占位），或图片路径如 "/images/posts/breaking-feeling/cover.jpg"
+# cover 可填 1–7（纯色占位），或图片路径如 "/images/posts/novel-feeling/cover.jpg"
 # 推荐封面比例：3:2（列表）/ 16:9（文章详情页）
 # excerpt 留空则自动取正文前 120 字
 
