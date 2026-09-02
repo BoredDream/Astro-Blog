@@ -111,22 +111,38 @@ document.querySelectorAll('[data-reading-progress]').forEach((bar) => {
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') set(false); });
 })();
 
-// ── 点赞（localStorage 记忆）────────────────────────────────────
+// ── 点赞（服务端计数 + localStorage 记忆，API 不可用时回退纯本地）──
 document.querySelectorAll('[data-like-btn]').forEach((btn) => {
   const id = btn.getAttribute('data-post-id');
   const base = parseInt(btn.getAttribute('data-like-count') || '0', 10);
   const numEl = btn.querySelector('[data-like-num]');
   let liked = false;
+  let live = null; // 服务端动态计数；null 表示尚未获取或服务端不可用
   try { liked = localStorage.getItem('like:' + id) === '1'; } catch (e) {}
   const render = () => {
     btn.classList.toggle('liked', liked);
-    if (numEl) numEl.textContent = String(base + (liked ? 1 : 0));
+    // 服务端不可用时退回旧逻辑：基数 + 自己点的 1
+    const total = live == null ? base + (liked ? 1 : 0) : base + live;
+    if (numEl) numEl.textContent = String(total);
   };
   render();
+  fetch(`/api/like?id=${encodeURIComponent(id)}`)
+    .then((r) => (r.ok ? r.json() : null))
+    .then((d) => { if (d && d.count != null) { live = d.count; render(); } })
+    .catch(() => {});
   btn.addEventListener('click', () => {
     liked = !liked;
     try { liked ? localStorage.setItem('like:' + id, '1') : localStorage.removeItem('like:' + id); } catch (e) {}
+    if (live != null) live = Math.max(0, live + (liked ? 1 : -1)); // 乐观更新，响应到达后校正
     render();
+    fetch('/api/like', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, action: liked ? 'like' : 'unlike' }),
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (d && d.count != null) { live = d.count; render(); } })
+      .catch(() => {});
   });
 });
 
