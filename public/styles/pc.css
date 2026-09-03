@@ -93,13 +93,13 @@ body { background: #ece8df; }
 .pc-side-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     cursor: pointer;
     padding-bottom: 28px;
 }
 .pc-side-brand-name {
     font-family: "Noto Serif SC", serif;
-    font-size: 21px;
+    font-size: 30px;
     font-weight: 500;
     line-height: 1;
     letter-spacing: 0.08em;
