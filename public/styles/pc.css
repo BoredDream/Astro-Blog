@@ -89,9 +89,18 @@ body { background: #ece8df; }
 .pc-side-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     cursor: pointer;
     padding-bottom: 28px;
+}
+.pc-side-brand-name {
+    font-family: "Noto Serif SC", serif;
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    color: #fff;
+    white-space: nowrap;
 }
 
 .pc-side-nav {

@@ -17,8 +17,9 @@ const links = [
 ];
 ---
 <aside class="pc-side">
-  <a class="pc-side-brand" href="/" aria-label="首页">
-    <BrandMark size={44} color="#fff" />
+  <a class="pc-side-brand" href="/" aria-label={`${config.site.name} - 首页`}>
+    <BrandMark size={56} color="#fff" />
+    <span class="pc-side-brand-name">{config.site.name}</span>
   </a>
   <nav class="pc-side-nav">
     {links.map((l) => (
