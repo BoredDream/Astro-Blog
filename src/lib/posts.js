@@ -28,6 +28,18 @@ export async function getBlogEntries() {
   });
 }
 
+// 相对时间：frontmatter 未手写 relTime 时按发布日期计算（构建期执行）。
+function computeRelTime(dateStr) {
+  const d = new Date(String(dateStr).replace(' ', 'T'));
+  if (isNaN(d.getTime())) return '';
+  const days = Math.floor((Date.now() - d.getTime()) / 86400000);
+  if (days < 1) return '今天';
+  if (days < 7) return `${days} 天前`;
+  if (days < 30) return `${Math.floor(days / 7)} 周前`;
+  if (days < 365) return `${Math.floor(days / 30)} 个月前`;
+  return `${Math.floor(days / 365)} 年前`;
+}
+
 // 取全部文章并映射为组件用的纯数据对象（缺摘要时自动生成）。
 export async function getPosts() {
   const entries = await getBlogEntries();
@@ -35,6 +47,7 @@ export async function getPosts() {
     id: e.slug,
     ...e.data,
     excerpt: e.data.excerpt || autoExcerpt(e.body),
+    relTime: e.data.relTime || computeRelTime(e.data.date),
   }));
 }
 

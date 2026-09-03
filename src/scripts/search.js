@@ -49,6 +49,27 @@ function initSearch(root, posts) {
 
   if (cancel) cancel.addEventListener('click', () => history.back());
 
+  // 支持 ?q= 直达：右栏搜索回车后预填并直接渲染结果
+  const initQ = new URLSearchParams(location.search).get('q');
+  if (initQ) {
+    input.value = initQ;
+    if (cancel) cancel.textContent = '清空';
+  }
+
+  if (cancel) {
+    cancel.addEventListener('click', () => {
+      if (initQ) {
+        // 直达模式下"清空"：回到空态并去掉 URL 参数
+        input.value = '';
+        cancel.textContent = '取消';
+        history.replaceState(null, '', '/search');
+        render();
+      } else {
+        history.back();
+      }
+    });
+  }
+
   const render = () => {
     const q = input.value.trim();
     if (!q) {

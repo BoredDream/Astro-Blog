@@ -15,7 +15,7 @@ const links = [
 ];
 ---
 <div class="drawer-scrim" data-drawer-close></div>
-<aside class="drawer">
+<aside class="drawer" role="dialog" aria-modal="true" aria-label="导航菜单" data-drawer>
   <div class="drawer-head">
     <BrandMark size={56} color="#fff" />
   </div>
@@ -51,6 +51,11 @@ const links = [
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
         <circle cx="11" cy="11" r="7"/>
         <path d="m20 20-3.5-3.5"/>
+      </svg>
+    </a>
+    <a title="RSS" aria-label="RSS" href="/rss.xml">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/>
       </svg>
     </a>
   </div>

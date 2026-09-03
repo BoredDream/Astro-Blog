@@ -46,6 +46,8 @@ const list = isFirst ? posts.slice(3) : posts;
       <div class="post-card-body">
         <h3 class="post-card-title">{p.title}</h3>
         <div class="post-card-meta">
+          <span class="m cat">{p.tags[0] || ''}</span>
+          <span class="m">{p.relTime}</span>
           <span class="m">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>

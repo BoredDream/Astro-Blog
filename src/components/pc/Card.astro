@@ -20,7 +20,7 @@ const { post } = Astro.props;
       {post.excerpt && <p class="pc-card-excerpt">{post.excerpt}</p>}
     </div>
     <div class="pc-card-foot">
-      <span>{post.relTime || '1 月前'}</span>
+      <span>{post.relTime}</span>
       <div class="pc-card-meta">
         <span class="m">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">

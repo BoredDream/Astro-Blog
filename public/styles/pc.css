@@ -11,23 +11,26 @@ body { background: #ece8df; }
     --pc-sidebar: 260px;
     --pc-right: 273px;
     --pc-gap: 20px;
-    --pc-pad-x: calc(var(--pc-sidebar) * 0.65);
-    --pc-pad-r: calc(var(--pc-sidebar) * 0.65);
+    /* 内容区左右留白：对齐 yufan.me（1440 时 56px，超宽屏随内容上限居中） */
+    --pc-pad-x: 56px;
+    --pc-pad-r: 56px;
 
     --pc-bg: #ece8df;
     --pc-card: #fbfaf7;
     --pc-hair: #ddd8cc;
     --pc-ink: #1f2230;
     --pc-ink-2: #4b4e5a;
-    --pc-ink-3: #8a8d96;
-    --pc-ink-4: #b7b9bf;
-    --pc-accent: #2f9aa8; /* teal used for headers + search caret */
+    --pc-ink-3: #636671;
+    --pc-ink-4: #7e818b;
+    --pc-accent: #1f7e8c; /* teal used for headers + search caret */
+    /* accent 作背景配白字时用（亮暗不变，保证 ≥4.5:1） */
+    --pc-accent-solid: #1f7e8c;
     --pc-side: #243152; /* left rail navy */
     --pc-side-ink: #d6d9e0;
     --pc-side-ink-dim: #8a90a3;
     --pc-tag-bg: #f1eee5;
     --pc-tag-text: #5a5d68;
-    --pc-page-active: #1a8a98;
+    --pc-page-active: #16717e;
     --pc-page-text: #34384a;
     --pc-page-hair: #cfcabd;
     --pc-like: #d6383a;
@@ -39,8 +42,9 @@ body { background: #ece8df; }
     --pc-hair: #2f3d5e;
     --pc-ink: #f1f4f8;
     --pc-ink-2: #c8d1de;
-    --pc-ink-3: #8390a4;
-    --pc-ink-4: #5a6478;
+    --pc-ink-3: #9aa8bc;
+    --pc-ink-4: #75829a;
+    --pc-accent: #3ab5c5; /* 暗底提亮链接色，保证对比度 */
     --pc-tag-bg: rgba(255, 255, 255, 0.06);
     --pc-tag-text: #c8d1de;
     --pc-page-text: #c8d1de;
@@ -170,13 +174,18 @@ body { background: #ece8df; }
 .pc-main {
     grid-column: 2;
     min-width: 0;
-    padding: 28px var(--pc-pad-r) 56px var(--pc-pad-x);
+    padding: 45px var(--pc-pad-r) 56px var(--pc-pad-x);
 }
 
 .pc-body {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    /* 卡片:右栏 = 8:3（yufan.me 同款动态比例） */
+    grid-template-columns: minmax(0, 8fr) 3fr;
     gap: var(--pc-gap);
+    /* 内容上限 1283px：超宽屏左右留白随视口增大（yufan 同款） */
+    max-width: 1283px;
+    margin-left: auto;
+    margin-right: auto;
     min-width: 0;
     margin-top: 0;
 }
@@ -186,13 +195,22 @@ body { background: #ece8df; }
    ============================================================ */
 .pc-center {
     min-width: 0;
+    /* 不被 grid 行拉伸（footer 底 = 内容底）；
+       flex 列 + footer margin-top:auto：短页面内容时页脚贴底，
+       min-height 由 global.js 动态设为 rail 高度，rail 停点始终 = 页脚底 */
+    align-self: start;
+    display: flex;
+    flex-direction: column;
 }
 
 .pc-hero {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 10px;
-    margin-bottom: 24px;
+    margin-bottom: 45px;
+    max-width: 1283px;
+    margin-left: auto;
+    margin-right: auto;
 }
 .pc-hero-main {
     position: relative;
@@ -246,7 +264,7 @@ body { background: #ece8df; }
 .pc-list {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 .pc-card {
     background: var(--pc-card);
@@ -287,16 +305,17 @@ body { background: #ece8df; }
     letter-spacing: 0.04em;
 }
 .pc-card-body {
-    padding: 24px 28px 22px;
+    /* padding 24px、内容垂直居中（对齐 yufan.me p-6 + justify-center） */
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     min-width: 0;
 }
 .pc-card-title {
     font-family: "Noto Serif SC", serif;
     font-size: 19px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--pc-ink);
     line-height: 1.4;
     margin: 0 0 12px;
@@ -381,6 +400,7 @@ body { background: #ece8df; }
 
 /* ----- Footer ----- */
 .pc-footer {
+    margin-top: auto; /* 内容列 flex 布局：页脚贴底，与 rail 停点对齐 */
     text-align: center;
     padding: 22px 0 12px;
     font-size: 13px;
@@ -390,25 +410,30 @@ body { background: #ece8df; }
 }
 
 /* ============================================================
-   Right rail widgets — scrolls with the page (not sticky)
+   Right rail widgets — sticky sliding
+   吸顶滑动（yufan.me 同款）：滚动时 rail 吸顶常驻；
+   内容列高于 rail 时，滚到底部 rail 被行底（= 页脚底）挡住，
+   日历底部与 Copyright 平齐。
    ============================================================ */
 .pc-rail {
     display: flex;
     flex-direction: column;
     gap: 4px;
     min-width: 0;
-    padding: 20px 24px 28px;
+    padding: 14px 24px 18px;
     background: var(--pc-card);
     align-self: start;
+    position: sticky;
+    top: 28px;
 }
 
 .pc-search {
     position: relative;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 .pc-search input {
     width: 100%;
-    height: 44px;
+    height: 40px;
     background: transparent;
     border: 0;
     border-bottom: 1px solid var(--pc-hair);
@@ -427,7 +452,7 @@ body { background: #ece8df; }
 }
 
 .pc-widget {
-    padding: 16px 4px 8px;
+    padding: 10px 4px 6px;
     border-top: 1px solid var(--pc-hair);
 }
 .pc-widget-head {
@@ -438,7 +463,7 @@ body { background: #ece8df; }
     font-size: 16px;
     color: var(--pc-accent);
     letter-spacing: 0.06em;
-    padding-bottom: 14px;
+    padding-bottom: 10px;
 }
 
 /* recent posts list */
@@ -448,7 +473,7 @@ body { background: #ece8df; }
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 10px;
 }
 .pc-recent li {
     font-size: 14.5px;
@@ -473,7 +498,7 @@ body { background: #ece8df; }
     background: var(--pc-tag-bg);
     color: var(--pc-tag-text);
     border: 0;
-    padding: 8px 18px;
+    padding: 7px 13px;
     font-size: 13.5px;
     cursor: pointer;
     font-family: inherit;
@@ -483,7 +508,7 @@ body { background: #ece8df; }
         color 0.15s ease;
 }
 .pc-tag:hover {
-    background: var(--pc-accent);
+    background: var(--pc-accent-solid);
     color: #fff;
 }
 .pc-tag::before {
@@ -497,7 +522,7 @@ body { background: #ece8df; }
 
 /* calendar tear-off */
 .pc-cal {
-    border: 1px solid var(--pc-ink);
+    border: 1px solid var(--pc-hair);
     padding: 0;
     background: var(--pc-card);
     color: var(--pc-ink);
@@ -515,10 +540,10 @@ body { background: #ece8df; }
 .pc-cal-day {
     text-align: center;
     font-family: "Noto Serif SC", serif;
-    font-size: 130px;
+    font-size: 88px;
     font-weight: 500;
     line-height: 1;
-    padding: 20px 0 4px;
+    padding: 10px 0 4px;
     letter-spacing: -0.02em;
 }
 .pc-cal-yi {
@@ -526,11 +551,11 @@ body { background: #ece8df; }
     font-family: "Noto Serif SC", serif;
     font-size: 18px;
     letter-spacing: 0.6em;
-    padding: 0 0 16px;
+    padding: 0 0 12px;
     border-bottom: 1px solid var(--pc-ink);
 }
 .pc-cal-quote {
-    padding: 18px 22px 10px;
+    padding: 12px 22px 6px;
     font-family: "Noto Serif SC", serif;
     font-size: 14.5px;
     line-height: 1.85;
@@ -540,7 +565,7 @@ body { background: #ece8df; }
 }
 .pc-cal-author {
     text-align: right;
-    padding: 0 22px 16px;
+    padding: 0 22px 8px;
     font-style: italic;
     font-size: 13px;
     color: var(--pc-ink-3);
@@ -560,7 +585,7 @@ body { background: #ece8df; }
 }
 .pc-article-title {
     font-family: "Noto Serif SC", serif;
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
     color: var(--pc-ink);
     margin: 0 0 16px;
@@ -1076,7 +1101,7 @@ body { background: #ece8df; }
     position: relative;
     transition: background 0.15s ease, color 0.15s ease;
 }
-.pc-share-btn:hover { background: var(--pc-accent); color: #fff; border-color: var(--pc-accent); }
+.pc-share-btn:hover { background: var(--pc-accent-solid); color: #fff; border-color: var(--pc-accent-solid); }
 .pc-share-tip {
     position: absolute;
     bottom: calc(100% + 6px);
@@ -1367,7 +1392,7 @@ body { background: #ece8df; }
 }
 .pc-not-found-btn {
     padding: 12px 32px;
-    background: var(--pc-accent);
+    background: var(--pc-accent-solid);
     color: #fff;
     border: 0;
     font-size: 14px;
@@ -1424,12 +1449,12 @@ body { background: #ece8df; }
     color: var(--pc-ink-3);
 }
 
-/* PC 布局流式化 —— 平板区间(769–1301px)优雅收缩，无横向滚动 */
+/* PC 布局流式化 —— 对齐 yufan.me 断点：右栏仅在 ≥1280px（xl）显示 */
 @media (max-width: 1301px) {
-    .pc { --pc-pad-x: 56px; --pc-pad-r: 56px; }
+    .pc { --pc-pad-x: 24px; --pc-pad-r: 24px; }
 }
-@media (max-width: 980px) {
-    .pc { --pc-pad-x: 32px; --pc-pad-r: 32px; }
+@media (max-width: 1279px) {
+    .pc { --pc-pad-x: 24px; --pc-pad-r: 24px; }
     .pc-body { grid-template-columns: 1fr; }
     .pc-rail { display: none; }
 }
@@ -1438,6 +1463,23 @@ body { background: #ece8df; }
    新增功能样式：阅读进度条 / 代码复制 / 标题锚点 / 图片放大 / 角标
    pc.css 与 mobile.css 全局加载，以下未加 .pc 前缀的规则对两端均生效。
    ============================================================ */
+
+/* ----- 用户偏好减少动效时降级 ----- */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ----- 键盘焦点可见性（PC 壳，含左侧深色栏） ----- */
+.pc :focus-visible,
+.pc:focus-visible {
+    outline: 2px solid var(--pc-accent);
+    outline-offset: 2px;
+}
 
 /* ----- 顶部阅读进度条 ----- */
 .reading-progress {
