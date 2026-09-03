@@ -1,5 +1,6 @@
 ---
-// 水墨圆形品牌标记。size 控制尺寸，color 覆盖描边色（默认继承 currentColor）。
+// 墨圈「无」字品牌标记（圆润篆意：等宽细线、笔画内敛）。
+// size 控制尺寸，color 覆盖描边色（默认继承 currentColor）。
 interface Props {
   size?: number;
   color?: string;
@@ -16,9 +17,10 @@ const style = color ? `color:${color}` : undefined;
     stroke-linecap="round"
   />
   <path
-    d="M19 22h18M20 22l-2.5-4M36 22l2.5-4M21 30h14M28 22v14"
+    d="M19 19Q28 18.2 37 18.9M17 28Q28 27.2 39 27.9M26 19C23.5 25.5 21 31 18.2 36.8M31.5 19C32.8 24.5 33.4 29 33.6 32.5Q33.8 36 37 36.5Q40 37 41 34.5"
+    fill="none"
     stroke="currentColor"
-    stroke-width="2"
+    stroke-width="2.2"
     stroke-linecap="round"
     stroke-linejoin="round"
   />
