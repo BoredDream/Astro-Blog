@@ -570,6 +570,21 @@ body {
   width: 56px;
   height: 56px;
 }
+.drawer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  text-decoration: none;
+}
+.drawer-brand-name {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  color: #fff;
+  white-space: nowrap;
+}
 
 .drawer-nav {
   display: flex;

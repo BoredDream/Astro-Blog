@@ -17,7 +17,10 @@ const links = [
 <div class="drawer-scrim" data-drawer-close></div>
 <aside class="drawer" role="dialog" aria-modal="true" aria-label="导航菜单" data-drawer>
   <div class="drawer-head">
-    <BrandMark size={56} color="#fff" />
+    <a class="drawer-brand" href="/" aria-label={`${config.site.name} - 首页`}>
+      <BrandMark size={56} color="#fff" />
+      <span class="drawer-brand-name serif">{config.site.name}</span>
+    </a>
   </div>
   <nav class="drawer-nav">
     {links.map((l) => (
