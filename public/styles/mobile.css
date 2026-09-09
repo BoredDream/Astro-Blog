@@ -54,6 +54,11 @@ html.dark body {
 /* ---------- Base ---------- */
 * { box-sizing: border-box; }
 
+/* 常驻滚动条槽位：抽屉打开时 body 锁滚动会让滚动条消失，
+   视口凭空变宽 15px，背后卡片/浮动按钮/抽屉宽度全部重排。
+   保留槽位后有无滚动条都是同一宽度，位移消失。 */
+html { scrollbar-gutter: stable; }
+
 body {
   margin: 0;
   background: #ECE9E2;
