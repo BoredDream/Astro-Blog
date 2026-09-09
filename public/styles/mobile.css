@@ -281,10 +281,10 @@ body {
   background: var(--bg-elev);
   overflow: hidden;
   display: grid;
+  /* 左右仍为 1:1；卡高改由右栏内容决定，不再用 3:1 锁死 */
   grid-template-columns: 1fr 1fr;
   cursor: pointer;
   transition: transform 0.2s ease;
-  aspect-ratio: 3/1;
 }
 .dark .post-card { background: var(--bg-elev); }
 .post-card:active { transform: scale(0.985); }
@@ -294,15 +294,29 @@ body {
   height: 100%;
   position: relative;
 }
+/* 分类角标：压在封面左上角，与 PC 卡写法一致 */
+.post-card-cat {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 11.5px;
+  padding: 3px 9px;
+  letter-spacing: 0.04em;
+}
 .post-card-body {
-  /* padding 12px、内容垂直居中（对齐 yufan.me p-3 + justify-center） */
+  /* padding 12px，内容自上而下排布（卡高即内容高，不留空白） */
   padding: 12px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 8px;
 }
 .post-card-title {
+  /* 清除 h3 默认上下外边距，否则卡高被多撑 30px */
+  margin: 0;
   font-family: "Noto Serif SC", serif;
   /* 15px/600（对齐 yufan.me 移动卡片标题） */
   font-size: 15px;
@@ -310,7 +324,19 @@ body {
   color: var(--ink);
   line-height: 1.4;
   letter-spacing: 0.02em;
-  /* 固定 3:1 卡高下防长标题被硬裁 */
+  /* 长标题截断为 2 行 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.post-card-excerpt {
+  margin: 0;
+  /* 12.5px，比标题低一档 */
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  /* 摘要最多 2 行 */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -323,12 +349,9 @@ body {
   /* 13px（对齐 yufan.me 卡片 meta 13.1px） */
   font-size: 13px;
   color: var(--ink-3);
-  /* 窄屏 3 项放不下时换行，卡高有富余 */
+  /* 窄屏 3 项放不下时换行 */
   flex-wrap: wrap;
   row-gap: 4px;
-}
-.post-card-meta .cat {
-  color: var(--accent);
 }
 .post-card-meta .m {
   display: flex;
