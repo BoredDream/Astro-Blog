@@ -281,10 +281,11 @@ body {
   background: var(--bg-elev);
   overflow: hidden;
   display: grid;
-  /* 左右仍为 1:1；卡高改由右栏内容决定，不再用 3:1 锁死 */
+  /* 左右 1:1；3:1 卡高让封面保持 3:2（与改版前一致） */
   grid-template-columns: 1fr 1fr;
   cursor: pointer;
   transition: transform 0.2s ease;
+  aspect-ratio: 3/1;
 }
 .dark .post-card { background: var(--bg-elev); }
 .post-card:active { transform: scale(0.985); }
@@ -307,7 +308,7 @@ body {
   letter-spacing: 0.04em;
 }
 .post-card-body {
-  /* padding 12px，内容自上而下排布（卡高即内容高，不留空白） */
+  /* padding 12px；标题贴顶、meta 靠 margin-top:auto 贴底 */
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -343,6 +344,8 @@ body {
   overflow: hidden;
 }
 .post-card-meta {
+  /* 吸底：吃掉右栏剩余空间，时间/浏览/点赞压在卡片底部 */
+  margin-top: auto;
   display: flex;
   align-items: center;
   gap: 10px;
