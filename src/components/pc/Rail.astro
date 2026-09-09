@@ -16,6 +16,23 @@ const allTags = posts ? [...new Set(posts.flatMap((p) => p.tags))].slice(0, 12) 
 const { quote, index: quoteIndex } = getDailyQuote();
 ---
 <aside class={'pc-rail' + (bottomAlign ? ' pc-rail-bottom' : '')}>
+  <div class="pc-widget" data-quote-widget data-quote-index={quoteIndex}>
+    <div class="pc-widget-head">
+      时光只言
+      <button class="pc-quote-next" type="button" data-quote-next aria-label="换一条格言" title="换一条">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+          <path d="M21 3v6h-6"/>
+        </svg>
+      </button>
+    </div>
+    <figure class="pc-quote">
+      <blockquote class="pc-quote-text" data-quote-text>{quote.text}</blockquote>
+      {quote.author && <figcaption class="pc-quote-author" data-quote-author>{quote.author}</figcaption>}
+    </figure>
+    <script type="application/json" data-quote-list set:html={JSON.stringify(config.quotes)} />
+  </div>
+
   <div class="pc-search">
     <input type="text" placeholder="文章寻踪（输入后回车）" data-rail-search />
   </div>
@@ -36,23 +53,6 @@ const { quote, index: quoteIndex } = getDailyQuote();
         <a class="pc-tag" href={tagUrl(t)}>{t}</a>
       ))}
     </div>
-  </div>
-
-  <div class="pc-widget" data-quote-widget data-quote-index={quoteIndex}>
-    <div class="pc-widget-head">
-      时光只言
-      <button class="pc-quote-next" type="button" data-quote-next aria-label="换一条格言" title="换一条">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
-          <path d="M21 3v6h-6"/>
-        </svg>
-      </button>
-    </div>
-    <figure class="pc-quote">
-      <blockquote class="pc-quote-text" data-quote-text>{quote.text}</blockquote>
-      {quote.author && <figcaption class="pc-quote-author" data-quote-author>{quote.author}</figcaption>}
-    </figure>
-    <script type="application/json" data-quote-list set:html={JSON.stringify(config.quotes)} />
   </div>
 </aside>
 
