@@ -11,6 +11,9 @@
 /** 建站年份：关于页「写作年限」统计的起算年 */
 const SINCE_YEAR = 2025;
 
+/** GitHub 用户名：社交链接与关于页头像共用（头像直接取 GitHub 头像接口） */
+const GITHUB_USER = "BoredDream";
+
 export const config = {
   // ── 站点基本信息 ─────────────────────────────────────────────────────
   site: {
@@ -23,12 +26,14 @@ export const config = {
   // ── 博主信息 ─────────────────────────────────────────────────────────
   author: {
     name: "CaoTang",
-    tagline: "Your tagline here",
+    /** 关于页署名下的一句话简介，留空则不渲染 */
+    tagline: "",
     /**
-     * 头像：留空则显示纯色占位块（1–7 选色），
-     * 或填图片路径如 '/images/avatar.jpg'（放在 public/ 下）
+     * 头像：数字 1–7 显示纯色占位块；字符串则渲染图片，
+     * 可为 public/ 下的本地路径（如 '/images/avatar.jpg'）或远程 URL。
+     * 这里直接取 GitHub 头像，点击跳转到 social.github。
      */
-    avatar: 1,
+    avatar: `https://github.com/${GITHUB_USER}.png?size=200`,
     /** 关于页三段简介，每项是一个段落 */
     bio: [
       "你好，这里是我的个人博客。这里记录着我的技术笔记、生活随想与读书所感，欢迎你的到来。",
@@ -57,7 +62,7 @@ export const config = {
   // ── 社交账号（留空则该图标自动隐藏）────────────────────────────────
   social: {
     /** 完整 URL，如 'https://github.com/yourname' */
-    github: "https://github.com/BoredDream",
+    github: `https://github.com/${GITHUB_USER}`,
     /** 完整 URL，如 'https://x.com/yourname' */
     x: "",
     /** 微信公众号 ID 或名称（悬停时显示为 title，不跳转） */

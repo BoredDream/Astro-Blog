@@ -10,12 +10,12 @@ const stats = config.author.stats(postCount);
 ---
 <div class="pc-about">
   <div class="pc-about-hero">
-    <div class="pc-about-avatar">
+    <a class="pc-about-avatar" href={config.social.github || undefined} target="_blank" rel="noopener noreferrer">
       <Placeholder variant={config.author.avatar || 1} label="portrait" />
-    </div>
+    </a>
     <div>
       <div class="pc-about-name serif">{config.author.name}</div>
-      <div class="pc-about-tagline">{config.author.tagline}</div>
+      {config.author.tagline && <div class="pc-about-tagline">{config.author.tagline}</div>}
       <div class="pc-about-stats">
         {stats.map((s) => (
           <div class="pc-about-stat">
