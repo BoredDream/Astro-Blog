@@ -93,7 +93,7 @@ body { background: #ece8df; }
 .pc-side-brand {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 8px;
     cursor: pointer;
     padding-bottom: 28px;
 }

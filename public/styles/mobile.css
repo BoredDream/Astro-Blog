@@ -101,7 +101,7 @@ body {
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
   cursor: pointer;
   color: var(--ink);
 }
@@ -602,7 +602,7 @@ body {
 .drawer-brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 8px;
   color: #fff;
   text-decoration: none;
 }
