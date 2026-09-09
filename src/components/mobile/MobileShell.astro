@@ -36,7 +36,7 @@ const { prevPost, nextPost } = getAdjacentPosts(posts, post);
     )}
     {page === 'category' && <Category posts={posts} />}
     {page === 'archive' && <Archive posts={posts} />}
-    {page === 'about' && <About />}
+    {page === 'about' && <About postCount={posts.length} />}
     {page === 'links' && <Links />}
     {page === 'search' && <Search posts={posts} />}
     {page === 'tag' && <Tag posts={posts} tag={tag} />}

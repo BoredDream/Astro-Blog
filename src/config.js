@@ -8,6 +8,9 @@
  * 网易云 API 地址在项目根目录 .env 中配置（PUBLIC_NETEASE_API）。
  */
 
+/** 建站年份：关于页「写作年限」统计的起算年 */
+const SINCE_YEAR = 2025;
+
 export const config = {
   // ── 站点基本信息 ─────────────────────────────────────────────────────
   site: {
@@ -32,11 +35,14 @@ export const config = {
       "写博客对我而言，是一种思考与沉淀，想把值得记录的事情认认真真地留存下来。",
       "如果你对这里的内容感兴趣，或者有什么想法，欢迎通过社交账号或邮件与我联系。",
     ],
-    /** 关于页统计数字 */
-    stats: [
-      { num: "1", label: "写作年限" },
-      { num: "10", label: "累计文章" },
-      { num: "?", label: "总阅读量" },
+    /**
+     * 关于页统计数字。写作年限按当前年份自动计算；累计文章取实际文章数，
+     * 由页面传入 postCount。
+     */
+    stats: (postCount = 0) => [
+      { num: String(new Date().getFullYear() - SINCE_YEAR), label: "写作年限" },
+      { num: String(postCount), label: "累计文章" },
+     // { num: "?", label: "总阅读量" },
     ],
   },
 
