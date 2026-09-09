@@ -761,7 +761,7 @@ body {
 /* ---------- Footer ---------- */
 .footer {
   text-align: center;
-  padding: 16px 16px 32px;
+  padding: 12px 16px 32px;
   font-size: 13px;
   color: var(--ink-3);
   line-height: 1.85;
@@ -845,7 +845,7 @@ body {
 }
 
 /* ---------- Footer-ish under list ---------- */
-.foot-pad { height: 28px; }
+.foot-pad { height: 4px; }
 
 /* ---------- Inner pages (shared) ---------- */
 .inner-page { min-height: 100%; }
