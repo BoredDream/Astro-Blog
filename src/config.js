@@ -20,7 +20,7 @@ export const config = {
     /** ⚠ 改成你的真实域名，RSS / sitemap / canonical 链接依赖此项 */
     url: "https://seul.me",
     name: "无忧乡",
-    description: "记录技术笔记、生活随想与读书所感的个人博客。",
+    description: "关于学习、爱情、成长的个人博客。",
   },
 
   // ── 博主信息 ─────────────────────────────────────────────────────────
