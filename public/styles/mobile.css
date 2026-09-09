@@ -626,24 +626,30 @@ body {
 .drawer-nav {
   display: flex;
   flex-direction: column;
-  gap: 23px;
+  /* 行间改用分割线分隔，不再靠 gap 撑开 */
+  gap: 0;
   flex: 1;
 }
 .drawer-link {
   font-family: "Noto Serif SC", serif;
-  /* 14px/行距 23（对齐 yufan.me 抽屉导航） */
-  font-size: 14px;
+  /* 17px/行高 24（与 PC 侧栏导航同规格，此前 14px 在 30px 品牌下显得过小） */
+  font-size: 17px;
   font-weight: 400;
-  line-height: 23px;
+  line-height: 24px;
   letter-spacing: 0.1em;
   color: var(--drawer-text);
   background: none;
   border: 0;
-  padding: 0;
+  /* 每项上下 15px 留白 → 行高 54px，行距不再局促 */
+  padding: 15px 0;
   text-align: left;
   cursor: pointer;
   opacity: 0.7;
   transition: opacity 0.2s ease, transform 0.2s ease;
+}
+/* 行间分割线：每项底部一条，最后一项不画 */
+.drawer-link:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
 }
 .drawer-link:hover { opacity: 1; transform: translateX(2px); }
 .drawer-link.active { opacity: 1; color: #fff; }
