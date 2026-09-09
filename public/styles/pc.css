@@ -520,6 +520,15 @@ body { background: #ece8df; }
     position: sticky;
     top: 28px;
 }
+/* 无 hero 的页面（文章/分类/归档等）右栏顶在视口上沿：
+   撑到接近一屏高、组件靠下对齐，留白集中到顶部，内容贴近屏幕底部。
+   首页右栏在 hero 下方，起点本就靠下，不做这个处理。 */
+.pc-rail-bottom {
+    /* 减掉 main 的 56px 底部内边距 + 右栏顶部偏移，避免短页面被撑出滚动条。
+       组件在整栏高度里均匀铺开：搜索贴顶、格言贴底，中间不留大片空白。 */
+    min-height: calc(100vh - 110px);
+    justify-content: space-between;
+}
 
 .pc-search {
     position: relative;
@@ -615,51 +624,24 @@ body { background: #ece8df; }
 }
 
 /* calendar tear-off */
-.pc-cal {
-    border: 1px solid var(--pc-hair);
-    padding: 0;
-    background: var(--pc-card);
-    color: var(--pc-ink);
-    margin-top: 4px;
+/* ----- 每日格言（原农历日历已移除，仅保留格言）----- */
+.pc-quote {
+    margin: 2px 0 4px;
+    padding: 2px 0 2px 14px;
+    border-left: 2px solid var(--pc-hair);
 }
-.pc-cal-head {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--pc-ink);
-    font-size: 13px;
-    font-family: "Noto Serif SC", serif;
-    letter-spacing: 0.04em;
-}
-.pc-cal-day {
-    text-align: center;
-    font-family: "Noto Serif SC", serif;
-    font-size: 88px;
-    font-weight: 500;
-    line-height: 1;
-    padding: 10px 0 4px;
-    letter-spacing: -0.02em;
-}
-.pc-cal-yi {
-    text-align: center;
-    font-family: "Noto Serif SC", serif;
-    font-size: 18px;
-    letter-spacing: 0.6em;
-    padding: 0 0 12px;
-    border-bottom: 1px solid var(--pc-ink);
-}
-.pc-cal-quote {
-    padding: 12px 22px 6px;
+.pc-quote-text {
+    margin: 0;
     font-family: "Noto Serif SC", serif;
     font-size: 14.5px;
-    line-height: 1.85;
+    line-height: 1.9;
     color: var(--pc-ink-2);
     text-align: justify;
     letter-spacing: 0.04em;
 }
-.pc-cal-author {
+.pc-quote-author {
+    margin-top: 10px;
     text-align: right;
-    padding: 0 22px 8px;
     font-style: italic;
     font-size: 13px;
     color: var(--pc-ink-3);
