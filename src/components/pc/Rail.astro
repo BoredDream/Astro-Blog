@@ -5,17 +5,15 @@ import { config } from '../../config.js';
 
 interface Props {
   posts: any[];
-  /** 无 hero 的页面传 true：右栏撑到一屏高、组件贴屏幕底部 */
-  bottomAlign?: boolean;
 }
-const { posts, bottomAlign = false } = Astro.props;
+const { posts } = Astro.props;
 
 const recent = posts ? posts.slice(0, 4) : [];
 const allTags = posts ? [...new Set(posts.flatMap((p) => p.tags))].slice(0, 12) : [];
 
 const { quote, index: quoteIndex } = getDailyQuote();
 ---
-<aside class={'pc-rail' + (bottomAlign ? ' pc-rail-bottom' : '')}>
+<aside class="pc-rail">
   <div class="pc-widget" data-quote-widget data-quote-index={quoteIndex}>
     <div class="pc-widget-head">
       时光只言

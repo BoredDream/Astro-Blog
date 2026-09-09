@@ -520,20 +520,17 @@ body { background: #ece8df; }
     position: sticky;
     top: 28px;
 }
-/* 无 hero 的页面（文章/分类/归档等）右栏顶在视口上沿：
-   撑到接近一屏高、组件靠下对齐，留白集中到顶部，内容贴近屏幕底部。
-   首页右栏在 hero 下方，起点本就靠下，不做这个处理。 */
-.pc-rail-bottom {
-    /* 减掉 main 的 56px 底部内边距 + 右栏顶部偏移，避免短页面被撑出滚动条。
-       组件在整栏高度里均匀铺开：搜索贴顶、格言贴底，中间不留大片空白。 */
-    min-height: calc(100vh - 110px);
-    justify-content: space-between;
-}
+/* 右栏不做拉伸：组件按自然间距排布，靠分割线分块，
+   避免铺满高度时把组件之间拉出大片空白。 */
 
 .pc-search {
     position: relative;
     margin-bottom: 8px;
+    /* 与相邻组件同样用分割线分块 */
+    border-top: 1px solid var(--pc-hair);
+    padding-top: 12px;
 }
+.dark .pc-search { border-top-color: rgba(255, 255, 255, 0.14); }
 .pc-search input {
     width: 100%;
     height: 40px;
@@ -555,9 +552,11 @@ body { background: #ece8df; }
 }
 
 .pc-widget {
-    padding: 10px 4px 6px;
+    padding: 12px 4px 10px;
     border-top: 1px solid var(--pc-hair);
 }
+/* 暗色下 --pc-hair 与卡片底色太接近，分割线几乎看不见，单独提亮 */
+.dark .pc-widget { border-top-color: rgba(255, 255, 255, 0.14); }
 /* 第一个组件在面板顶端，顶部细线没有分隔意义 */
 .pc-rail > .pc-widget:first-child { border-top: 0; }
 .pc-widget-head {
