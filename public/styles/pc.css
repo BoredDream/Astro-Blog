@@ -170,6 +170,97 @@ body { background: #ece8df; }
     color: #fff;
 }
 
+/* ----- Sidebar mini music player ----- */
+.pc-music {
+    /* 贴在社交图标上方，与导航区之间留一条分隔线 */
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.pc-music-head {
+    font-size: 11.5px;
+    letter-spacing: 0.2em;
+    color: var(--pc-side-ink-dim);
+    margin-bottom: 12px;
+}
+.pc-music-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.pc-music-toggle {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.pc-music-toggle:hover { background: rgba(255, 255, 255, 0.18); }
+.pc-music-toggle:disabled { opacity: 0.35; cursor: not-allowed; }
+/* 播放三角形视觉重心偏左，右移半像素对齐圆心 */
+.pc-music-toggle .icon-play { transform: translateX(1px); }
+.pc-music-meta {
+    min-width: 0;
+    flex: 1;
+}
+.pc-music-title,
+.pc-music-artist {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.pc-music-title {
+    font-size: 13px;
+    color: var(--pc-side-ink);
+}
+.pc-music-artist {
+    font-size: 11.5px;
+    color: var(--pc-side-ink-dim);
+    margin-top: 3px;
+}
+.pc-music-next {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border: 0;
+    background: none;
+    padding: 0;
+    color: var(--pc-side-ink-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+.pc-music-next:hover { color: #fff; }
+.pc-music-bar {
+    height: 3px;
+    margin-top: 12px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.14);
+    cursor: pointer;
+}
+.pc-music-fill {
+    width: 0;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--pc-accent);
+}
+.pc-music-time {
+    margin-top: 6px;
+    font-size: 10.5px;
+    color: var(--pc-side-ink-dim);
+    font-variant-numeric: tabular-nums;
+}
+.pc-music.is-idle .pc-music-bar { opacity: 0.5; cursor: default; }
+
 /* ============================================================
    Main area (right of the fixed sidebar)
    Structure: hero (full width) -> body grid (center + rail)
