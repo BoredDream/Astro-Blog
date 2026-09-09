@@ -1,6 +1,7 @@
 ---
 import BrandMark from '../shared/BrandMark.astro';
 import { NAV_URL } from '../../lib/urls.js';
+import { getDailyQuote } from '../../lib/quotes.js';
 import { config } from '../../config.js';
 
 interface Props { currentPage?: string; }
@@ -13,6 +14,8 @@ const links = [
   { id: 'about',    label: '关于', href: NAV_URL.about },
   { id: 'links',    label: '友链', href: NAV_URL.links },
 ];
+
+const { quote, index: quoteIndex } = getDailyQuote();
 ---
 <div class="drawer-scrim" data-drawer-close></div>
 <aside class="drawer" role="dialog" aria-modal="true" aria-label="导航菜单" data-drawer>
@@ -27,6 +30,25 @@ const links = [
       <a class={'drawer-link serif' + (currentPage === l.id ? ' active' : '')} href={l.href}>{l.label}</a>
     ))}
   </nav>
+
+  <!-- 每日格言：填住导航与社交图标之间的空白 -->
+  <section class="drawer-quote" data-quote-widget data-quote-index={quoteIndex}>
+    <div class="drawer-quote-head">
+      时光只言
+      <button class="drawer-quote-next" type="button" data-quote-next aria-label="换一条格言" title="换一条">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+          <path d="M21 3v6h-6"/>
+        </svg>
+      </button>
+    </div>
+    <figure class="drawer-quote-body">
+      <blockquote class="drawer-quote-text" data-quote-text>{quote.text}</blockquote>
+      {quote.author && <figcaption class="drawer-quote-author" data-quote-author>{quote.author}</figcaption>}
+    </figure>
+    <script type="application/json" data-quote-list set:html={JSON.stringify(config.quotes)} />
+  </section>
+
   <div class="drawer-social">
     {config.social.github && (
       <a href={config.social.github} title="GitHub" target="_blank" rel="noopener noreferrer">
@@ -63,3 +85,5 @@ const links = [
     </a>
   </div>
 </aside>
+
+<script>import '../../scripts/quote.js';</script>

@@ -677,6 +677,61 @@ body {
 .drawer-social button:hover,
 .drawer-social a:hover { background: rgba(255,255,255,0.16); }
 
+/* 抽屉里的每日格言（填住导航与社交图标之间的空白） */
+.drawer-quote {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.drawer-quote-head {
+  display: flex;
+  align-items: center;
+  font-family: "Noto Serif SC", serif;
+  font-size: 15px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+.drawer-quote-next {
+  margin-left: auto;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--drawer-text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.3s ease;
+}
+.drawer-quote-next:hover { color: #fff; transform: rotate(90deg); }
+.drawer-quote-body { margin: 0; }
+.drawer-quote-text {
+  margin: 0;
+  font-family: "Noto Serif SC", serif;
+  font-size: 14.5px;
+  line-height: 1.95;
+  color: var(--drawer-text);
+  text-align: justify;
+  letter-spacing: 0.02em;
+}
+.drawer-quote-author {
+  margin-top: 12px;
+  text-align: right;
+  font-style: italic;
+  font-size: 12.5px;
+  color: var(--drawer-text-dim);
+  font-family: Georgia, "Times New Roman", serif;
+}
+@keyframes drawer-quote-fade {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: none; }
+}
+.is-swapping .drawer-quote-body { animation: drawer-quote-fade 0.28s ease; }
+
 /* ---------- Image placeholders (striped + label) ---------- */
 .ph {
   position: absolute;
