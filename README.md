@@ -83,9 +83,10 @@ npm run dev
 | `author` | 博主姓名、签名、头像、关于页简介和统计数字 |
 | `footer` | 建站年份、ICP 备案号（留空不显示） |
 | `social` | GitHub / X / 微信账号（留空不显示对应图标） |
-| `pagination` | 首页每页文章数（默认 9） |
+| `music` | 侧栏迷你播放器曲目（每首填 `neteaseId` 或 `url`） |
+| `pagination` | 首页每页文章数（默认 7） |
 | `theme` | 主色调、侧栏色、浅色/深色背景 |
-| `calendar` | 侧栏日历小部件（静态装饰，每月手动更新） |
+| `quotes` | 右栏「时光只言」每日格言，按日期轮换 |
 
 **友链**在 `src/data/links.js` 中单独管理。
 
@@ -159,7 +160,6 @@ excerpt: "自定义摘要（可选，不填则自动截取正文）"
 
 - [Astro](https://astro.build/) v4 — 静态站点生成框架（页面零运行时 JS）
 - 原生 JavaScript — 主题切换、灯箱、搜索等交互增强（`src/scripts/`，无框架依赖）
-- [lunar-javascript](https://github.com/6tail/lunar-javascript) — 侧栏农历日历（仅构建期使用，不进客户端）
 - [@astrojs/rss](https://docs.astro.build/zh-cn/guides/rss/) — RSS 生成
 - [@astrojs/sitemap](https://docs.astro.build/zh-cn/guides/integrations-guide/sitemap/) — Sitemap 生成
 - [Shiki](https://shiki.style/) — 代码语法高亮

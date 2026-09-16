@@ -46,13 +46,17 @@ Astro v4 静态站点（`output: 'static'`）。核心设计目标是**零客户
 ### 构建期与客户端的分工
 
 - `Layout.astro` 负责全部 SEO：canonical、Open Graph（文章页 `og:type=article` + `og:image`）、Twitter Card、JSON-LD（由 `jsonLd` prop 传入）、RSS `<link>`、自托管字体，以及用 `define:vars={config.theme}` 注入主题色 CSS 变量。`<head>` 里有一段内联脚本在**绘制前**读取 `localStorage.theme` 给 `<html>` 加 `.dark` 防止闪烁。
-- `src/scripts/` 下的原生 JS 通过 `<script>` 标签引入以便 Astro 打包：`global.js`（每页：主题切换、回到顶部、移动抽屉、右栏搜索）、`article.js`（仅文章页：代码复制、标题锚点、灯箱、阅读进度、TOC、点赞、复制链接、音频播放器）、`search.js`（`search.astro` 会把精简后的文章索引序列化进 `<script type="application/json" id="search-data">`）。**脚本与模板之间的约定是 `data-*` 属性**：`data-theme-toggle`、`data-scroll-top`、`data-drawer-open`/`data-drawer-close`、`data-article-body`、`data-toc-open`/`data-toc-close`/`data-toc-link`。改模板时不要删这些属性。
+- `src/scripts/` 下的原生 JS 通过 `<script>` 标签引入以便 Astro 打包：`global.js`（每页：主题切换、回到顶部、移动抽屉、右栏搜索）、`article.js`（仅文章页：代码复制、标题锚点、灯箱、阅读进度、TOC、点赞、复制链接、音频播放器）、`search.js`（`search.astro` 会把精简后的文章索引序列化进 `<script type="application/json" id="search-data">`）、`quote.js`（格言"换一条"）、`music.js`（PC 侧栏迷你播放器）。后两者由组件就近引入：`pc/Rail.astro` 引入 `quote.js`，`mobile/Drawer.astro` 也引入同一份 `quote.js`（两端共用），`pc/Sidebar.astro` 引入 `music.js`。**脚本与模板之间的约定是 `data-*` 属性**：`data-theme-toggle`、`data-scroll-top`、`data-drawer-open`/`data-drawer-close`、`data-article-body`、`data-toc-open`/`data-toc-close`/`data-toc-link`、`data-quote-widget`/`data-quote-next`/`data-quote-text`/`data-quote-author`/`data-quote-list`、`data-music-player`/`data-music-el`。改模板时不要删这些属性。格言列表由 `[data-quote-list]` 上的 JSON（`config.quotes` 序列化）提供。
 - 文章页在 `[slug].astro` 内计算 `headings`（来自 `entry.render()`）与 `readMin`（正文去空白 ÷ 300，最小 1），再向下传给两个外壳。
-- `lunar-javascript` 只在构建期为 `pc/Rail.astro` 计算农历日期与宜忌（`config.quotes` 按天轮换格言），永不进客户端包。
+- 日期相关的展示全部在**构建期**算好：`src/lib/quotes.js` 的 `getDailyQuote()` 按一年中的第几天在 `config.quotes` 里取当日格言，PC 右栏与移动抽屉共用同一函数以保证两端当天一致。
 
 ### 配置与环境
 
-- `src/config.js` 是唯一配置文件（站点、作者、页脚/备案、社交、分页、主题色、格言）。`config.site.url` 必须是真实域名——RSS、sitemap、canonical 都依赖它。
+- `src/config.js` 是唯一配置文件（站点、作者、页脚/备案、社交、音乐、分页、主题色、格言）。`config.site.url` 必须是真实域名——RSS、sitemap、canonical 都依赖它。
+- `config.js` 顶部有两个模块级常量：`SINCE_YEAR`（关于页"写作年限"的起算年）与 `GITHUB_USER`（社交链接与关于页头像共用）。
+- `config.author.stats` **是函数不是数组**：`stats(postCount)` 返回统计项，写作年限按当前年份算、累计文章取实际文章数。调用方必须传 `postCount`（两个外壳已传 `posts.length`），加字段时注意同步 `pc/pages/About.astro` 与 `mobile/About.astro`。
+- `config.author.tagline` 留空则不渲染署名行（模板里是 `{config.author.tagline && ...}`），默认就是空串。
+- `config.music.tracks` 驱动 PC 侧栏迷你播放器，每首二选一填 `neteaseId`（经 `PUBLIC_NETEASE_API` 换播放地址）或 `url`（直链）。
 - `src/data/links.js` — 友链数据，单独管理。
 - 根目录 `.env`：`PUBLIC_NETEASE_API`（可选网易云播放器，见 `.env.example`）。
 
@@ -74,6 +78,6 @@ Astro v4 静态站点（`output: 'static'`）。核心设计目标是**零客户
 
 ## 易踩的坑
 
-- `relTime`（"3 天前"）在构建期算好并固化在 HTML 里，站点不重新构建就不会更新。
+- 所有跟"今天"有关的内容都在构建期固化：`relTime`（"3 天前"）与当日格言（`getDailyQuote()`）都是如此。静态站点不重新构建，它们跨天也不会变——这是刻意的取舍，不是 bug。
 - 文章正文在输出 HTML 中出现两次（PC + 移动各一份），检查渲染结果时不要误判为重复 bug。
 - `dist/`、`.astro/` 是生成物，`.zcode/` 是本地计划目录，均已在 `.gitignore` 中。
