@@ -2,6 +2,12 @@
 import Placeholder from '../shared/Placeholder.astro';
 import Footer from './Footer.astro';
 import { config } from '../../config.js';
+
+interface Props {
+  postCount?: number;
+}
+const { postCount = 0 } = Astro.props;
+const stats = config.author.stats(postCount);
 ---
 <div class="inner-page">
   <div class="inner-page-head">
@@ -9,17 +15,17 @@ import { config } from '../../config.js';
   </div>
 
   <div class="about-hero">
-    <div class="about-avatar">
+    <a class="about-avatar" href={config.social.github || undefined} target="_blank" rel="noopener noreferrer">
       <Placeholder variant={config.author.avatar || 1} label="portrait" />
-    </div>
+    </a>
     <div class="about-info">
       <div class="about-name serif">{config.author.name}</div>
-      <div class="about-tagline">{config.author.tagline}</div>
+      {config.author.tagline && <div class="about-tagline">{config.author.tagline}</div>}
     </div>
   </div>
 
   <div class="about-stats">
-    {config.author.stats.map((s) => (
+    {stats.map((s) => (
       <div class="about-stat">
         <div class="about-stat-num serif">{s.num}</div>
         <div class="about-stat-label">{s.label}</div>

@@ -1,0 +1,43 @@
+---
+// PC 侧栏迷你音乐播放器。
+// 曲目来源 config.music.tracks；neteaseId 走 PUBLIC_NETEASE_API 取播放地址，
+// url 则直接用直链。没有可播放曲目时按钮呈禁用态。
+import { config } from '../../config.js';
+
+const music = config.music || {};
+const tracks = Array.isArray(music.tracks) ? music.tracks : [];
+const hasApi = Boolean(import.meta.env.PUBLIC_NETEASE_API);
+const anyPlayable = tracks.some((t) => t.url || (t.neteaseId && hasApi));
+const first = tracks[0] || {};
+---
+{tracks.length > 0 && (
+  <div class="pc-music" data-music-player data-tracks={JSON.stringify(tracks)}>
+    <div class="pc-music-head">{music.label || '在听'}</div>
+    <div class="pc-music-row">
+      <button class="pc-music-toggle" type="button" data-music-toggle aria-label="播放 / 暂停" disabled={!anyPlayable}>
+        <svg class="icon-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg class="icon-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none">
+          <path d="M6 5h4v14H6zM14 5h4v14h-4z"/>
+        </svg>
+      </button>
+      <div class="pc-music-meta">
+        <div class="pc-music-title" data-music-title>{first.title || ''}</div>
+        <div class="pc-music-artist" data-music-artist>{first.artist || ''}</div>
+      </div>
+      {tracks.length > 1 && (
+        <button class="pc-music-next" type="button" data-music-next aria-label="下一首">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M6 5l9 7-9 7zM17 5h2v14h-2z"/>
+          </svg>
+        </button>
+      )}
+    </div>
+    <div class="pc-music-bar" data-music-seek role="presentation">
+      <div class="pc-music-fill" data-music-fill></div>
+    </div>
+    <div class="pc-music-time" data-music-time>00:00 / 00:00</div>
+    <audio data-music-el preload="none"></audio>
+  </div>
+)}

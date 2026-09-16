@@ -1,6 +1,6 @@
 ---
-import { Solar } from 'lunar-javascript';
 import { postUrl, tagUrl } from '../../lib/urls.js';
+import { getDailyQuote } from '../../lib/quotes.js';
 import { config } from '../../config.js';
 
 interface Props {
@@ -11,26 +11,26 @@ const { posts } = Astro.props;
 const recent = posts ? posts.slice(0, 4) : [];
 const allTags = posts ? [...new Set(posts.flatMap((p) => p.tags))].slice(0, 12) : [];
 
-// 日历 + 每日格言：在构建期用 lunar-javascript 计算，农历库不进客户端包。
-// 注意：日期固定为构建时刻，按需重建即可保持新鲜。
-const MONTHS = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
-const WEEKDAYS = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
-const now = new Date();
-const lunar = Solar.fromDate(now).getLunar();
-const yi = lunar.getDayYi();
-const dayOfYear = Math.floor((now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000);
-const quote = config.quotes[dayOfYear % config.quotes.length];
-const cal = {
-  month: MONTHS[now.getMonth()],
-  weekday: WEEKDAYS[now.getDay()],
-  day: now.getDate().toString(),
-  lunarDate: `${lunar.getYearInGanZhi()}年 ${lunar.getMonthInChinese()}月${lunar.getDayInChinese()}`,
-  auspicious: yi.length > 0 ? `宜${yi[0]}` : '诸事皆宜',
-  quote: quote.text,
-  quoteAuthor: quote.author,
-};
+const { quote, index: quoteIndex } = getDailyQuote();
 ---
 <aside class="pc-rail">
+  <div class="pc-widget" data-quote-widget data-quote-index={quoteIndex}>
+    <div class="pc-widget-head">
+      时光只言
+      <button class="pc-quote-next" type="button" data-quote-next aria-label="换一条格言" title="换一条">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+          <path d="M21 3v6h-6"/>
+        </svg>
+      </button>
+    </div>
+    <figure class="pc-quote">
+      <blockquote class="pc-quote-text" data-quote-text>{quote.text}</blockquote>
+      {quote.author && <figcaption class="pc-quote-author" data-quote-author>{quote.author}</figcaption>}
+    </figure>
+    <script type="application/json" data-quote-list set:html={JSON.stringify(config.quotes)} />
+  </div>
+
   <div class="pc-search">
     <input type="text" placeholder="文章寻踪（输入后回车）" data-rail-search />
   </div>
@@ -52,19 +52,6 @@ const cal = {
       ))}
     </div>
   </div>
-
-  <div class="pc-widget">
-    <div class="pc-widget-head">时光只言</div>
-    <div class="pc-cal">
-      <div class="pc-cal-head">
-        <span>{cal.month}</span>
-        <span>{cal.lunarDate}</span>
-        <span>{cal.weekday}</span>
-      </div>
-      <div class="pc-cal-day">{cal.day}</div>
-      <div class="pc-cal-yi">{cal.auspicious}</div>
-      <div class="pc-cal-quote">{cal.quote}</div>
-      <div class="pc-cal-author">{cal.quoteAuthor}</div>
-    </div>
-  </div>
 </aside>
+
+<script>import '../../scripts/quote.js';</script>

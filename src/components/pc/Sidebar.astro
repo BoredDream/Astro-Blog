@@ -1,5 +1,6 @@
 ---
 import BrandMark from '../shared/BrandMark.astro';
+import MiniPlayer from './MiniPlayer.astro';
 import { NAV_URL } from '../../lib/urls.js';
 import { config } from '../../config.js';
 
@@ -26,6 +27,7 @@ const links = [
       <a class={'pc-side-link' + (active === l.id ? ' active' : '')} href={l.href}>{l.label}</a>
     ))}
   </nav>
+  <MiniPlayer />
   <div class="pc-side-social">
     {config.social.github && (
       <a href={config.social.github} title="GitHub" aria-label="github" target="_blank" rel="noopener noreferrer">
@@ -71,3 +73,5 @@ const links = [
     </a>
   </div>
 </aside>
+
+<script>import '../../scripts/music.js';</script>

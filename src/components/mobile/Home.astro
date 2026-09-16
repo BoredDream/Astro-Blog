@@ -40,13 +40,14 @@ const list = isFirst ? posts.slice(3) : posts;
   {list.map((p) => (
     <a class="post-card" href={postUrl(p)}>
       <div class="post-card-img">
+        {p.tags && p.tags[0] && <div class="post-card-cat">{p.tags[0]}</div>}
         <PostFlags post={p} />
         <Placeholder variant={p.cover} label={p.coverLabel} />
       </div>
       <div class="post-card-body">
         <h3 class="post-card-title">{p.title}</h3>
+        {p.excerpt && <p class="post-card-excerpt">{p.excerpt}</p>}
         <div class="post-card-meta">
-          <span class="m cat">{p.tags[0] || ''}</span>
           <span class="m">{p.relTime}</span>
           <span class="m">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">

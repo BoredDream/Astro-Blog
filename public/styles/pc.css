@@ -93,7 +93,7 @@ body { background: #ece8df; }
 .pc-side-brand {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 8px;
     cursor: pointer;
     padding-bottom: 28px;
 }
@@ -105,6 +105,9 @@ body { background: #ece8df; }
     letter-spacing: 0.08em;
     color: #fff;
     white-space: nowrap;
+    /* 字体上下度量不对称：行盒居中时字形墨迹偏低，上移补偿使墨迹与左侧标记圆心对齐 */
+    position: relative;
+    top: -0.065em;
 }
 
 .pc-side-nav {
@@ -166,6 +169,97 @@ body { background: #ece8df; }
 .pc-side-social a:hover {
     color: #fff;
 }
+
+/* ----- Sidebar mini music player ----- */
+.pc-music {
+    /* 贴在社交图标上方，与导航区之间留一条分隔线 */
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.pc-music-head {
+    font-size: 11.5px;
+    letter-spacing: 0.2em;
+    color: var(--pc-side-ink-dim);
+    margin-bottom: 12px;
+}
+.pc-music-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.pc-music-toggle {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.pc-music-toggle:hover { background: rgba(255, 255, 255, 0.18); }
+.pc-music-toggle:disabled { opacity: 0.35; cursor: not-allowed; }
+/* 播放三角形视觉重心偏左，右移半像素对齐圆心 */
+.pc-music-toggle .icon-play { transform: translateX(1px); }
+.pc-music-meta {
+    min-width: 0;
+    flex: 1;
+}
+.pc-music-title,
+.pc-music-artist {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.pc-music-title {
+    font-size: 13px;
+    color: var(--pc-side-ink);
+}
+.pc-music-artist {
+    font-size: 11.5px;
+    color: var(--pc-side-ink-dim);
+    margin-top: 3px;
+}
+.pc-music-next {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border: 0;
+    background: none;
+    padding: 0;
+    color: var(--pc-side-ink-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+.pc-music-next:hover { color: #fff; }
+.pc-music-bar {
+    height: 3px;
+    margin-top: 12px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.14);
+    cursor: pointer;
+}
+.pc-music-fill {
+    width: 0;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--pc-accent);
+}
+.pc-music-time {
+    margin-top: 6px;
+    font-size: 10.5px;
+    color: var(--pc-side-ink-dim);
+    font-variant-numeric: tabular-nums;
+}
+.pc-music.is-idle .pc-music-bar { opacity: 0.5; cursor: default; }
 
 /* ============================================================
    Main area (right of the fixed sidebar)
@@ -426,11 +520,17 @@ body { background: #ece8df; }
     position: sticky;
     top: 28px;
 }
+/* 右栏不做拉伸：组件按自然间距排布，靠分割线分块，
+   避免铺满高度时把组件之间拉出大片空白。 */
 
 .pc-search {
     position: relative;
     margin-bottom: 8px;
+    /* 与相邻组件同样用分割线分块 */
+    border-top: 1px solid var(--pc-hair);
+    padding-top: 12px;
 }
+.dark .pc-search { border-top-color: rgba(255, 255, 255, 0.14); }
 .pc-search input {
     width: 100%;
     height: 40px;
@@ -452,9 +552,13 @@ body { background: #ece8df; }
 }
 
 .pc-widget {
-    padding: 10px 4px 6px;
+    padding: 12px 4px 10px;
     border-top: 1px solid var(--pc-hair);
 }
+/* 暗色下 --pc-hair 与卡片底色太接近，分割线几乎看不见，单独提亮 */
+.dark .pc-widget { border-top-color: rgba(255, 255, 255, 0.14); }
+/* 第一个组件在面板顶端，顶部细线没有分隔意义 */
+.pc-rail > .pc-widget:first-child { border-top: 0; }
 .pc-widget-head {
     display: flex;
     align-items: center;
@@ -521,51 +625,50 @@ body { background: #ece8df; }
 }
 
 /* calendar tear-off */
-.pc-cal {
-    border: 1px solid var(--pc-hair);
+/* ----- 每日格言（原农历日历已移除，仅保留格言）----- */
+.pc-quote-next {
+    margin-left: auto;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    border: 0;
+    background: none;
     padding: 0;
-    background: var(--pc-card);
-    color: var(--pc-ink);
-    margin-top: 4px;
-}
-.pc-cal-head {
+    color: var(--pc-ink-3);
     display: flex;
-    justify-content: space-between;
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--pc-ink);
-    font-size: 13px;
-    font-family: "Noto Serif SC", serif;
-    letter-spacing: 0.04em;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.3s ease;
 }
-.pc-cal-day {
-    text-align: center;
-    font-family: "Noto Serif SC", serif;
-    font-size: 88px;
-    font-weight: 500;
-    line-height: 1;
-    padding: 10px 0 4px;
-    letter-spacing: -0.02em;
+.pc-quote-next:hover {
+    color: var(--pc-accent);
+    transform: rotate(90deg);
 }
-.pc-cal-yi {
-    text-align: center;
-    font-family: "Noto Serif SC", serif;
-    font-size: 18px;
-    letter-spacing: 0.6em;
-    padding: 0 0 12px;
-    border-bottom: 1px solid var(--pc-ink);
+@keyframes pc-quote-fade {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: none; }
 }
-.pc-cal-quote {
-    padding: 12px 22px 6px;
+.is-swapping .pc-quote {
+    animation: pc-quote-fade 0.28s ease;
+}
+.pc-quote {
+    margin: 2px 0 4px;
+    padding: 2px 0 2px 14px;
+    border-left: 2px solid var(--pc-hair);
+}
+.pc-quote-text {
+    margin: 0;
     font-family: "Noto Serif SC", serif;
     font-size: 14.5px;
-    line-height: 1.85;
+    line-height: 1.9;
     color: var(--pc-ink-2);
     text-align: justify;
     letter-spacing: 0.04em;
 }
-.pc-cal-author {
+.pc-quote-author {
+    margin-top: 10px;
     text-align: right;
-    padding: 0 22px 8px;
     font-style: italic;
     font-size: 13px;
     color: var(--pc-ink-3);
