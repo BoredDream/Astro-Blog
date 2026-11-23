@@ -3,11 +3,10 @@ import Layout from '../layouts/Layout.astro';
 import PCShell from '../components/pc/PCShell.astro';
 import MobileShell from '../components/mobile/MobileShell.astro';
 import { getPosts } from '../lib/posts.js';
-import { config } from '../config.js';
 
 const posts = await getPosts();
 ---
-<Layout title={`页面不见了 · ${config.site.name}`}>
+<Layout title="页面不见了">
   <PCShell page="404" posts={posts} />
   <MobileShell page="404" posts={posts} />
 </Layout>
