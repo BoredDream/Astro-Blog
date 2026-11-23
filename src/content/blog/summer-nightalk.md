@@ -1,7 +1,7 @@
 ---
 title: "夏日夜话"
 date: "2026-06-03 08:00"
-tags: ["Uninversity life","Friends"]
+tags: ["University life","Friends"]
 cover: 1
 coverLabel: "Life · Friends "
 excerpt: ""
