@@ -15,7 +15,7 @@ const jsonLd = {
   url: config.site.url,
 };
 ---
-<Layout jsonLd={jsonLd}>
+<Layout description={config.site.description} jsonLd={jsonLd}>
   <PCShell page="home" posts={posts} pageNum={1} />
   <MobileShell page="home" posts={posts} pageNum={1} />
 </Layout>

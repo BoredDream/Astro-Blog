@@ -21,6 +21,8 @@ export const config = {
     url: "https://seul.me",
     name: "无忧乡",
     description: "关于学习、爱情、成长的个人博客。",
+    /** 默认社交分享图（1200×630）：文章无图片封面时使用，og:image 依赖此项 */
+    ogImage: "/images/og-default.png",
   },
 
   // ── 博主信息 ─────────────────────────────────────────────────────────
