@@ -18,7 +18,7 @@ const searchData = posts.map((p) => ({
 }));
 const searchJson = JSON.stringify(searchData).replace(/</g, '\\u003c');
 ---
-<Layout title="搜索" description={`搜索${config.site.name}的文章。`}>
+<Layout title="搜索" description={`搜索${config.site.name}的文章。`} noindex>
   <PCShell page="search" posts={posts} />
   <MobileShell page="search" posts={posts} />
   <script type="application/json" id="search-data" set:html={searchJson}></script>

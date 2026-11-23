@@ -17,9 +17,19 @@ function rehypeLazyImages() {
   };
 }
 
+// 薄内容页（搜索、分页、分类索引）不进 sitemap；它们同时输出 noindex,follow。
+function isThinPage(pageUrl) {
+  const path = new URL(pageUrl).pathname.replace(/\/+$/, '') || '/';
+  return path === '/search' || path === '/categories' || /^\/page\/\d+$/.test(path);
+}
+
 export default defineConfig({
   site: config.site.url,
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => !isThinPage(page),
+    }),
+  ],
   output: 'static',
   // 链接进入视口即预取，点击近乎瞬开。
   prefetch: {

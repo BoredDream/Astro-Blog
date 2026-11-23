@@ -17,6 +17,8 @@ interface Props {
   modifiedTime?: string;
   tags?: string[];
   jsonLd?: Record<string, any>;
+  /** 薄内容页（搜索、分页、分类索引）：输出 noindex,follow */
+  noindex?: boolean;
 }
 const {
   title,
@@ -27,6 +29,7 @@ const {
   modifiedTime,
   tags,
   jsonLd,
+  noindex = false,
 } = Astro.props;
 
 // 标题模板的唯一出口：{page} · {站点名}。
@@ -42,6 +45,7 @@ const ogImage = new URL(image || config.site.ogImage, Astro.site).href;
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {noindex && <meta name="robots" content="noindex,follow" />}
   <title>{pageTitle}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalURL} />
