@@ -5,6 +5,7 @@ tags: ["建站","随想"]
 cover: 1
 coverLabel: "Dream · Future "
 excerpt: ""
+draft: true            # 测试文章：草稿状态，dev 可见、build 时排除
 # cover 可填 1–7（纯色占位），或图片路径如 "/images/posts/hexo2astro/cover.jpg"
 # 推荐封面比例：3:2（列表）/ 16:9（文章详情页）
 # excerpt 留空则自动取正文前 120 字
